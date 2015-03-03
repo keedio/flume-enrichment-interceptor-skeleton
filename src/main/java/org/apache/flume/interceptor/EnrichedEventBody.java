@@ -14,8 +14,13 @@ public class EnrichedEventBody {
     private byte[] message;
 
     @JsonCreator
-    public EnrichedEventBody(@JsonProperty("extra_data") Map<String, String> extraData, @JsonProperty("message") byte[] message) {
-        this.extraData = extraData;
+    public EnrichedEventBody(@JsonProperty("extraData") Map<String, String> extraData,
+                             @JsonProperty("message") byte[] message) {
+        if (extraData == null) {
+            this.extraData = new HashMap<String, String>();
+        } else {
+            this.extraData = extraData;
+        }
         this.message = message;
     }
 
