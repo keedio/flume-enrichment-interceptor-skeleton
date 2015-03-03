@@ -34,7 +34,7 @@ public class EnrichedEventBody {
         return enrichedBody;
     }
 
-    public byte[] getEventBody() throws IOException {
+    public byte[] buildEventBody() throws IOException {
         return JSONStringSerializer.toJSONString(this).getBytes();
     }
 

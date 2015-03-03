@@ -3,8 +3,6 @@ package org.apache.flume.interceptor;
 
 import org.apache.flume.Context;
 import org.apache.flume.Event;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -54,7 +52,7 @@ public class EnrichmentInterceptor implements Interceptor {
                 data.put(key, props.getProperty(key));
             }
             enrichedBody.setExtraData(data);
-            event.setBody(enrichedBody.getEventBody());
+            event.setBody(enrichedBody.buildEventBody());
         } catch (IOException e) {
             e.printStackTrace();
         }
