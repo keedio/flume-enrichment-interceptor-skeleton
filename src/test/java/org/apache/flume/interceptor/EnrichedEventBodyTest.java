@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class EnrichedEventBodyTest {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(EnrichmentInterceptor.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(EnrichedEventBodyTest.class);
 
     @Test
     public void testCreateFromEventBody() {
@@ -27,6 +27,20 @@ public class EnrichedEventBodyTest {
             EnrichedEventBody newMessage = EnrichedEventBody.createFromEventBody(json.getBytes(), true);
 
             Assert.assertEquals(JSONStringSerializer.toJSONString(newMessage), json);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testMessageIntegrity() {
+        String message = "hello";
+        EnrichedEventBody enrichedEventBody = new EnrichedEventBody(message.getBytes());
+        try {
+            byte[] enrichedBody = enrichedEventBody.buildEventBody();
+            EnrichedEventBody retrievedBody = EnrichedEventBody.createFromEventBody(enrichedBody, true);
+            Assert.assertEquals(new String(retrievedBody.getMessage()), message);
         } catch (IOException e) {
             e.printStackTrace();
             Assert.fail();

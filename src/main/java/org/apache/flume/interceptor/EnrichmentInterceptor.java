@@ -3,6 +3,7 @@ package org.apache.flume.interceptor;
 
 import org.apache.flume.Context;
 import org.apache.flume.Event;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,31 +13,46 @@ import java.util.*;
 
 public class EnrichmentInterceptor implements Interceptor {
 
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(EnrichmentInterceptor.class);
+
+    static final String EVENT_TYPE = "event.type";
+    static final String PROPERTIES_FILENAME = "properties.filename";
+
     private boolean isEnriched;
     private String filename;
     private Properties props;
 
     public EnrichmentInterceptor(Context context) {
 
-        String eventType = context.getString("event.type").toLowerCase();
+        try {
+            String eventType = context.getString(EVENT_TYPE).toLowerCase();
+            this.isEnriched = eventType.equals("enriched");
+        } catch (NullPointerException e) {
+            logger.warn("Property event.type is not set. Assuming DEFAULT (not enriched).");
+            this.isEnriched = false;
+        }
 
-        this.filename = context.getString("properties.filename");
-        this.isEnriched = eventType.equals("enriched");
+        this.filename = context.getString(PROPERTIES_FILENAME);
         this.props = new Properties();
 
     }
 
     @Override
     public void initialize() {
-        InputStream input;
-        try {
-            input = new FileInputStream(this.filename);
-            this.props.load(input);
-            input.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (this.filename == null || this.filename.equals("")) {
+            logger.warn("Property file not set. Events will be enriched with empty extraData.");
+        } else {
+            try {
+                InputStream input = new FileInputStream(this.filename);
+                this.props.load(input);
+                input.close();
+            } catch (FileNotFoundException e) {
+                logger.error("Property file not found: " + this.filename);
+                e.printStackTrace();
+            } catch (IOException e) {
+                logger.error("Error loading properties from file: " + this.filename);
+                e.printStackTrace();
+            }
         }
     }
 
@@ -72,6 +88,18 @@ public class EnrichmentInterceptor implements Interceptor {
     @Override
     public void close() {
 
+    }
+
+    Properties getProps() {
+        return props;
+    }
+
+    boolean isEnriched() {
+        return isEnriched;
+    }
+
+    String getFilename() {
+        return filename;
     }
 
     public static class Builder implements Interceptor.Builder {

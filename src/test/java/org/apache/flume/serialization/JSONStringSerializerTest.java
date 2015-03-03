@@ -1,7 +1,6 @@
 package org.apache.flume.serialization;
 
 import org.apache.flume.interceptor.EnrichedEventBody;
-import org.apache.flume.interceptor.EnrichmentInterceptor;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -10,7 +9,7 @@ import java.io.IOException;
 
 public class JSONStringSerializerTest {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(EnrichmentInterceptor.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(JSONStringSerializerTest.class);
 
     @Test(enabled = false)
     public void testNonEmptySerialization() {
