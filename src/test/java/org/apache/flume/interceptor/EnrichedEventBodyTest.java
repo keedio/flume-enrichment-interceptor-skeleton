@@ -14,8 +14,7 @@ public class EnrichedEventBodyTest {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(EnrichmentInterceptor.class);
 
     @Test
-    public void testCreateFromByteArray() {
-        // Build a enriched event payload
+    public void testCreateFromEventBody() {
         byte[] bytes = "hello".getBytes();
         Map<String, String> data = new HashMap<String, String>();
         data.put("k1", "v1");
@@ -32,6 +31,27 @@ public class EnrichedEventBodyTest {
             e.printStackTrace();
             Assert.fail();
         }
+    }
 
+    @Test
+    public void testNullExtraData() {
+        byte[] message = "hello".getBytes();
+        String messageAsJsonString = "{\"message\":\"aGVsbG8=\"}";
+
+        try {
+            // build an event from bytes with no extra_data and get its JSON string
+            EnrichedEventBody fromBytes = new EnrichedEventBody(message);
+
+            // build an event from JSON string with no extra_data
+            EnrichedEventBody fromJson = JSONStringSerializer.fromJSONString(messageAsJsonString, EnrichedEventBody.class);
+
+            logger.info("fromBytes.extraData is: " + fromBytes.getExtraData());
+            logger.info("fromJSON.extraData is: " + fromJson.getExtraData());
+            Assert.assertEquals(fromBytes.getExtraData(), fromJson.getExtraData());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
     }
 }
