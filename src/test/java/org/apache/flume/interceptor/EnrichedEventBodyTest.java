@@ -22,10 +22,10 @@ public class EnrichedEventBodyTest {
 
         EnrichedEventBody enrichedEventBody = new EnrichedEventBody(data, bytes);
 
-        String json = null;
+        String json;
         try {
             json = JSONStringSerializer.toJSONString(enrichedEventBody);
-            EnrichedEventBody newMessage = EnrichedEventBody.createFromByteArray(json.getBytes(), true);
+            EnrichedEventBody newMessage = EnrichedEventBody.createFromEventBody(json.getBytes(), true);
 
             Assert.assertEquals(JSONStringSerializer.toJSONString(newMessage), json);
         } catch (IOException e) {

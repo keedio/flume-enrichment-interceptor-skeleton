@@ -24,7 +24,7 @@ public class EnrichedEventBody {
         this.message = message;
     }
 
-    public static EnrichedEventBody createFromByteArray(byte[] payload, boolean isEnriched) throws IOException {
+    public static EnrichedEventBody createFromEventBody(byte[] payload, boolean isEnriched) throws IOException {
         EnrichedEventBody enrichedBody;
         if (isEnriched) {
             enrichedBody = JSONStringSerializer.fromJSONString(new String(payload), EnrichedEventBody.class);
@@ -34,7 +34,7 @@ public class EnrichedEventBody {
         return enrichedBody;
     }
 
-    public byte[] toByteArray() throws IOException {
+    public byte[] getEventBody() throws IOException {
         return JSONStringSerializer.toJSONString(this).getBytes();
     }
 

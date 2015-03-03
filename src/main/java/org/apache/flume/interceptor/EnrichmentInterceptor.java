@@ -14,8 +14,6 @@ import java.util.*;
 
 public class EnrichmentInterceptor implements Interceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(EnrichmentInterceptor.class);
-
     private boolean isEnriched;
     private String filename;
     private Properties props;
@@ -25,14 +23,14 @@ public class EnrichmentInterceptor implements Interceptor {
         String eventType = context.getString("event.type").toLowerCase();
 
         this.filename = context.getString("properties.filename");
-        this.isEnriched = (eventType == "enriched");
+        this.isEnriched = eventType.equals("enriched");
         this.props = new Properties();
 
     }
 
     @Override
     public void initialize() {
-        InputStream input = null;
+        InputStream input;
         try {
             input = new FileInputStream(this.filename);
             this.props.load(input);
@@ -47,16 +45,16 @@ public class EnrichmentInterceptor implements Interceptor {
     @Override
     public Event intercept(Event event) {
         byte[] payload = event.getBody();
-        EnrichedEventBody enrichedBody = null;
+        EnrichedEventBody enrichedBody;
         try {
-            enrichedBody = EnrichedEventBody.createFromByteArray(payload, isEnriched);
+            enrichedBody = EnrichedEventBody.createFromEventBody(payload, isEnriched);
 
             Map<String, String> data = enrichedBody.getExtraData();
             for (String key : props.stringPropertyNames()) {
                 data.put(key, props.getProperty(key));
             }
             enrichedBody.setExtraData(data);
-            event.setBody(enrichedBody.toByteArray());
+            event.setBody(enrichedBody.getEventBody());
         } catch (IOException e) {
             e.printStackTrace();
         }
