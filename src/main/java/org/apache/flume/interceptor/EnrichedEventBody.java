@@ -11,11 +11,11 @@ import java.util.Map;
 public class EnrichedEventBody {
 
     private Map<String, String> extraData;
-    private byte[] message;
+    private String message;
 
     @JsonCreator
     public EnrichedEventBody(@JsonProperty("extraData") Map<String, String> extraData,
-                             @JsonProperty("message") byte[] message) {
+                             @JsonProperty("message") String message) {
         if (extraData == null) {
             this.extraData = new HashMap<String, String>();
         } else {
@@ -24,17 +24,18 @@ public class EnrichedEventBody {
         this.message = message;
     }
 
-    public EnrichedEventBody(byte[] message) {
+    public EnrichedEventBody(String message) {
         this.extraData = new HashMap<String, String>();
         this.message = message;
     }
 
     public static EnrichedEventBody createFromEventBody(byte[] payload, boolean isEnriched) throws IOException {
         EnrichedEventBody enrichedBody;
+        String message = new String(payload);
         if (isEnriched) {
-            enrichedBody = JSONStringSerializer.fromJSONString(new String(payload), EnrichedEventBody.class);
+            enrichedBody = JSONStringSerializer.fromJSONString(message, EnrichedEventBody.class);
         } else {
-            enrichedBody = new EnrichedEventBody(payload);
+            enrichedBody = new EnrichedEventBody(message);
         }
         return enrichedBody;
     }
@@ -62,11 +63,11 @@ public class EnrichedEventBody {
         this.extraData = extraData;
     }
 
-    public byte[] getMessage() {
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(byte[] message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 

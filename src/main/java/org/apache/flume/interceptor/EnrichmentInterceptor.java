@@ -70,8 +70,9 @@ public class EnrichmentInterceptor implements Interceptor {
             event.setBody(enrichedBody.buildEventBody());
 
             logger.debug("Intercepted " + (isEnriched ? "EnrichedType" : "DefaultType") + " event:"
-                            + "\n\tBody was: " + (isEnriched ? new String(payload) : payload)
+                            + "\n\tBody was: " + new String(payload)
                             + "\nEnriched body is:"
+                            + "\n\tBody: " + new String(event.getBody())
                             + "\n\tMessage: " + enrichedBody.getMessage()
                             + "\n\tData: " + enrichedBody.getExtraData()
             );
