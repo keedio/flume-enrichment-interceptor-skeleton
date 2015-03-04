@@ -1,6 +1,5 @@
 package org.apache.flume.interceptor;
 
-
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.slf4j.LoggerFactory;
@@ -69,6 +68,13 @@ public class EnrichmentInterceptor implements Interceptor {
             }
             enrichedBody.setExtraData(data);
             event.setBody(enrichedBody.buildEventBody());
+
+            logger.debug("Intercepted " + (isEnriched ? "EnrichedType" : "DefaultType") + " event:"
+                            + "\n\tBody was: " + (isEnriched ? new String(payload) : payload)
+                            + "\nEnriched body is:"
+                            + "\n\tMessage: " + enrichedBody.getMessage()
+                            + "\n\tData: " + enrichedBody.getExtraData()
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
