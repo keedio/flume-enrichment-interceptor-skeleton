@@ -16,6 +16,7 @@ public class EnrichmentInterceptorTest {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(EnrichmentInterceptorTest.class);
 
+    // Helper methods
     private Map<String, String> propertiesToMap(Properties props) {
         Map<String, String> m = new HashMap<String, String>();
         for (String key : props.stringPropertyNames()) {
@@ -24,6 +25,31 @@ public class EnrichmentInterceptorTest {
         return m;
     }
 
+    private Map<String, String> mergeProps(Properties p1, Properties p2) {
+        Map<String, String> m = propertiesToMap(p1);
+        for (String key : p2.stringPropertyNames()) {
+            m.put(key, p2.getProperty(key));
+        }
+        return m;
+    }
+
+    private EnrichmentInterceptor createInterceptor(String filename, String eventType) {
+        Context context = new Context();
+        context.put(EnrichmentInterceptor.EVENT_TYPE, eventType);
+        context.put(EnrichmentInterceptor.PROPERTIES_FILENAME, filename);
+
+        EnrichmentInterceptor interceptor = new EnrichmentInterceptor(context);
+        interceptor.initialize();
+        return interceptor;
+    }
+
+    private Event createEvent(byte[] body) {
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("h1", "value1");
+        return EventBuilder.withBody(body, headers);
+    }
+
+    // Test suite
     @Test
     public void testEmptyEventTypeProperty() {
         Context context = new Context();
@@ -59,35 +85,64 @@ public class EnrichmentInterceptorTest {
         Assert.assertTrue(interceptor.getFilename() == null && interceptor.getProps().equals(emptyProps));
     }
 
-    @Test(enabled = true)
-    public void testFullInterception() {
-        String filename = "src/test/resources/interceptor.properties";
-
-        Context context = new Context();
-        context.put(EnrichmentInterceptor.EVENT_TYPE, "DEFAULT");
-        context.put(EnrichmentInterceptor.PROPERTIES_FILENAME, filename);
-
-        EnrichmentInterceptor interceptor = new EnrichmentInterceptor(context);
-        interceptor.initialize();
-
-        byte[] body = "hello".getBytes();
-        Map<String, String> headers = new HashMap<String, String>();
-        headers.put("h1", "value1");
-        Event event = EventBuilder.withBody(body, headers);
-        String originalMessage = new String(event.getBody());
-
-        interceptor.intercept(event);
+    @Test
+    public void testSingleInterception() {
         try {
+            Event event = createEvent("hello".getBytes());
+            String originalMessage = new String(event.getBody());
+
+            String filename = "src/test/resources/interceptor.properties";
+            EnrichmentInterceptor interceptor = createInterceptor(filename, "DEFAULT");
+
+            interceptor.intercept(event);
+
             EnrichedEventBody enrichedEventBody = EnrichedEventBody.createFromEventBody(event.getBody(), true);
             String enrichedMessage = new String(enrichedEventBody.getMessage());
 
-            logger.info("enriched message is: " + enrichedMessage);
             logger.info("original message is: " + originalMessage);
+            logger.info("enriched message is: " + enrichedMessage);
             Assert.assertEquals(originalMessage, enrichedMessage);
 
             logger.info("props are: " + interceptor.getProps());
             logger.info("extradata is: " + enrichedEventBody.getExtraData());
             Assert.assertEquals(propertiesToMap(interceptor.getProps()), enrichedEventBody.getExtraData());
+        } catch (IOException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testMultipleInterception() {
+
+        try {
+            // First interception. Inbound message has default format.
+            Event event = createEvent("hello".getBytes());
+            String originalMessage = new String(event.getBody());
+
+            String filename = "src/test/resources/interceptor.properties";
+            EnrichmentInterceptor interceptor = createInterceptor(filename, "DEFAULT");
+
+            interceptor.intercept(event);
+
+            // Second interception. Inbound message is enriched.
+            String filename2 = "src/test/resources/interceptor2.properties";
+            EnrichmentInterceptor interceptor2 = createInterceptor(filename2, "enriched");
+
+            interceptor2.intercept(event);
+
+            EnrichedEventBody enrichedEventBody = EnrichedEventBody.createFromEventBody(event.getBody(), true);
+            String enrichedMessage = new String(enrichedEventBody.getMessage());
+
+            Map<String, String> combinedData = mergeProps(interceptor.getProps(), interceptor2.getProps());
+
+            logger.info("original message is: " + originalMessage);
+            logger.info("enriched message is: " + enrichedMessage);
+            Assert.assertEquals(originalMessage, enrichedMessage);
+
+            logger.info("combined props are: " + combinedData);
+            logger.info("extradata is: " + enrichedEventBody.getExtraData());
+            Assert.assertEquals(combinedData, enrichedEventBody.getExtraData());
         } catch (IOException e) {
             e.printStackTrace();
             Assert.fail();
