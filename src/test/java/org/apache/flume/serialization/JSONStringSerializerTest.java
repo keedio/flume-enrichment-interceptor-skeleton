@@ -13,8 +13,8 @@ public class JSONStringSerializerTest {
 
     @Test(enabled = false)
     public void testNonEmptySerialization() {
-        byte[] message = "hello".getBytes();
-        String messageAsJsonString = "{\"message\":\"aGVsbG8=\"}";
+        String message = "hello";
+        String messageAsJsonString = "{\"message\":\"" + message + "\"}";
 
         try {
             // build an event from bytes with no extra_data and get its JSON string

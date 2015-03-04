@@ -4,7 +4,7 @@ This project provides an interceptor to enrich event body with custom data. The 
 
 - EnrichedEventBody: represents enriched event body. The enriched event will have 2 attributes: extraData and message.
     extraData will be fed with the custom data set in the configuration file (see below) while message will preserve
-    the original event body. The enriched event is then serialized to a JSON object.
+    the original event body string. The enriched event is then serialized to a JSON object.
 - EnrichmentInterceptor: implements the Flume interceptor interface. The intercept() method will add the custom data
     to the original event body and serialize it back as a JSON string.
 - JSONStringSerializer: the JSON serializer
@@ -20,10 +20,11 @@ $ git clone https://github.com/keedio/flume-enrichment-interceptor-skeleton.git
 Build with Maven:
 
 ```sh
-$ mvn clean package
+$ mvn clean install
 ```
 
-The jar file can be found in the target/ subdirectory. Add it to your Flume classpath.
+The jar file will be installed in your local maven repository and can be found in the target/ subdirectory also. Add it
+to your Flume classpath.
 
 Configure your agent to use this interceptor, setting the following options in your configuration file:
 
@@ -47,6 +48,10 @@ The enriched event body will contain:
 ```json
 {
  "extraData":{"hostname": "localhost", "domain": "localdomain"},
- "message": "the original body (byte[])"
+ "message": "the original body string"
 }
 ```
+
+## Changes from version 0.0.1
+
+EnrichedEventBody.message is now a String (was byte[]).

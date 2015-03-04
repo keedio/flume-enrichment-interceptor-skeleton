@@ -15,11 +15,11 @@ public class EnrichedEventBodyTest {
 
     @Test
     public void testCreateFromEventBody() {
-        byte[] bytes = "hello".getBytes();
+        String message = "hello";
         Map<String, String> data = new HashMap<String, String>();
         data.put("k1", "v1");
 
-        EnrichedEventBody enrichedEventBody = new EnrichedEventBody(data, bytes);
+        EnrichedEventBody enrichedEventBody = new EnrichedEventBody(data, message);
 
         String json;
         try {
@@ -36,11 +36,11 @@ public class EnrichedEventBodyTest {
     @Test
     public void testMessageIntegrity() {
         String message = "hello";
-        EnrichedEventBody enrichedEventBody = new EnrichedEventBody(message.getBytes());
+        EnrichedEventBody enrichedEventBody = new EnrichedEventBody(message);
         try {
             byte[] enrichedBody = enrichedEventBody.buildEventBody();
             EnrichedEventBody retrievedBody = EnrichedEventBody.createFromEventBody(enrichedBody, true);
-            Assert.assertEquals(new String(retrievedBody.getMessage()), message);
+            Assert.assertEquals(retrievedBody.getMessage(), message);
         } catch (IOException e) {
             e.printStackTrace();
             Assert.fail();
@@ -49,8 +49,8 @@ public class EnrichedEventBodyTest {
 
     @Test
     public void testNullExtraData() {
-        byte[] message = "hello".getBytes();
-        String messageAsJsonString = "{\"message\":\"aGVsbG8=\"}";
+        String message = "hello";
+        String messageAsJsonString = "{\"message\":\"" + message + "\"}";
 
         try {
             // build an event from bytes with no extra_data and get its JSON string

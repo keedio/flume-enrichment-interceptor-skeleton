@@ -43,25 +43,22 @@ public class EnrichmentInterceptorTest {
         return interceptor;
     }
 
-    private Event createEvent(byte[] body) {
+    private Event createEvent(String message) {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("h1", "value1");
-        return EventBuilder.withBody(body, headers);
+        return EventBuilder.withBody(message.getBytes(), headers);
     }
 
     // Test suite
     @Test
     public void testEmptyEventTypeProperty() {
-        Context context = new Context();
-        context.put(EnrichmentInterceptor.EVENT_TYPE, "");
-        EnrichmentInterceptor interceptor = new EnrichmentInterceptor(context);
+        EnrichmentInterceptor interceptor = createInterceptor(null, "");
         Assert.assertFalse(interceptor.isEnriched());
     }
 
     @Test
     public void testMissingEventTypeProperty() {
-        Context context = new Context();
-        EnrichmentInterceptor interceptor = new EnrichmentInterceptor(context);
+        EnrichmentInterceptor interceptor = createInterceptor(null, null);
         Assert.assertFalse(interceptor.isEnriched());
     }
 
@@ -69,26 +66,21 @@ public class EnrichmentInterceptorTest {
     public void testEmptyFilenameProperty() {
         String emptyString = "";
         Properties emptyProps = new Properties();
-        Context context = new Context();
-        context.put(EnrichmentInterceptor.PROPERTIES_FILENAME, "");
-        EnrichmentInterceptor interceptor = new EnrichmentInterceptor(context);
-        interceptor.initialize();
+        EnrichmentInterceptor interceptor = createInterceptor("", null);
         Assert.assertTrue(interceptor.getFilename().equals(emptyString) && interceptor.getProps().equals(emptyProps));
     }
 
     @Test
     public void testMissingFilenameProperty() {
         Properties emptyProps = new Properties();
-        Context context = new Context();
-        EnrichmentInterceptor interceptor = new EnrichmentInterceptor(context);
-        interceptor.initialize();
+        EnrichmentInterceptor interceptor = createInterceptor(null, null);
         Assert.assertTrue(interceptor.getFilename() == null && interceptor.getProps().equals(emptyProps));
     }
 
     @Test
     public void testSingleInterception() {
         try {
-            Event event = createEvent("hello".getBytes());
+            Event event = createEvent("hello");
             String originalMessage = new String(event.getBody());
 
             String filename = "src/test/resources/interceptor.properties";
@@ -97,7 +89,7 @@ public class EnrichmentInterceptorTest {
             interceptor.intercept(event);
 
             EnrichedEventBody enrichedEventBody = EnrichedEventBody.createFromEventBody(event.getBody(), true);
-            String enrichedMessage = new String(enrichedEventBody.getMessage());
+            String enrichedMessage = enrichedEventBody.getMessage();
 
             logger.info("original message is: " + originalMessage);
             logger.info("enriched message is: " + enrichedMessage);
@@ -117,7 +109,7 @@ public class EnrichmentInterceptorTest {
 
         try {
             // First interception. Inbound message has default format.
-            Event event = createEvent("hello".getBytes());
+            Event event = createEvent("hello");
             String originalMessage = new String(event.getBody());
 
             String filename = "src/test/resources/interceptor.properties";
@@ -132,7 +124,7 @@ public class EnrichmentInterceptorTest {
             interceptor2.intercept(event);
 
             EnrichedEventBody enrichedEventBody = EnrichedEventBody.createFromEventBody(event.getBody(), true);
-            String enrichedMessage = new String(enrichedEventBody.getMessage());
+            String enrichedMessage = enrichedEventBody.getMessage();
 
             Map<String, String> combinedData = mergeProps(interceptor.getProps(), interceptor2.getProps());
 
