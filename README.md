@@ -47,6 +47,6 @@ The enriched event body will contain:
 ```json
 {
  "extraData":{"hostname": "localhost", "domain": "localdomain"},
- "message": THE_ORIGINAL_BODY_as_BYTE_ARRAY
+ "message": "the original body (byte[])"
 }
 ```
