@@ -3,12 +3,15 @@ package org.apache.flume.interceptor;
 import org.apache.flume.serialization.JSONStringSerializer;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class EnrichedEventBody {
+
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(EnrichedEventBody.class);
 
     private Map<String, String> extraData;
     private String message;
@@ -50,7 +53,7 @@ public class EnrichedEventBody {
         try {
             s = JSONStringSerializer.toJSONString(this);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         return s;
     }
