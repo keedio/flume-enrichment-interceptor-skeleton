@@ -14,6 +14,10 @@ public class JSONStringSerializer {
         mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
     }
 
+    private JSONStringSerializer() {
+        // nothing to do, really
+    }
+
     public static String toJSONString(Object object) throws IOException {
         return mapper.writeValueAsString(object);
     }
