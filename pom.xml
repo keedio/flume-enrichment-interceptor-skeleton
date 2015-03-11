@@ -1,23 +1,30 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>org.apache.flume</groupId>
     <artifactId>flume-enrichment-interceptor</artifactId>
-    <version>0.0.2</version>
-
+    <version>0.0.3</version>
     <properties>
         <!-- Generic properties -->
         <java.version>1.7</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
         <!--  Dependency versions -->
         <flume.core.version>1.5.2</flume.core.version>
         <jackson.version>1.9.13</jackson.version>
         <testng.version>6.1.1</testng.version>
     </properties>
-
+    <distributionManagement>
+        <repository>
+            <id>keedio-releases</id>
+            <name>Keedio Releases</name>
+            <url>http://jenkins.keedio.com:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>keedio-snapshots</id>
+            <name>Keedio Snapshots</name>
+            <url>http://jenkins.keedio.com:8081/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
     <dependencies>
         <dependency>
             <groupId>org.testng</groupId>
@@ -42,7 +49,7 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
+    
     <build>
         <plugins>
             <plugin>
@@ -71,5 +78,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

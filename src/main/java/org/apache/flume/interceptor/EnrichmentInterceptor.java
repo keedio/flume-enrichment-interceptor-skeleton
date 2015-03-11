@@ -25,9 +25,9 @@ public class EnrichmentInterceptor implements Interceptor {
 
         try {
             String eventType = context.getString(EVENT_TYPE).toLowerCase();
-            this.isEnriched = eventType.equals("enriched");
+            this.isEnriched = "enriched".equals(eventType);
         } catch (NullPointerException e) {
-            logger.warn("Property event.type is not set. Assuming DEFAULT (not enriched).");
+            logger.warn("Property event.type is not set. Assuming DEFAULT (not enriched).", e);
             this.isEnriched = false;
         }
 
@@ -38,7 +38,7 @@ public class EnrichmentInterceptor implements Interceptor {
 
     @Override
     public void initialize() {
-        if (this.filename == null || this.filename.equals("")) {
+        if (this.filename == null || "".equals(this.filename)) {
             logger.warn("Property file not set. Events will be enriched with empty extraData.");
         } else {
             try {
@@ -46,11 +46,9 @@ public class EnrichmentInterceptor implements Interceptor {
                 this.props.load(input);
                 input.close();
             } catch (FileNotFoundException e) {
-                logger.error("Property file not found: " + this.filename);
-                e.printStackTrace();
+                logger.error("Property file not found: " + this.filename, e);
             } catch (IOException e) {
-                logger.error("Error loading properties from file: " + this.filename);
-                e.printStackTrace();
+                logger.error("Error loading properties from file: " + this.filename, e);
             }
         }
     }
@@ -77,7 +75,7 @@ public class EnrichmentInterceptor implements Interceptor {
                             + "\n\tData: " + enrichedBody.getExtraData()
             );
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
 
         return event;
@@ -94,7 +92,7 @@ public class EnrichmentInterceptor implements Interceptor {
 
     @Override
     public void close() {
-
+        /* nothing to do, really */
     }
 
     Properties getProps() {
@@ -109,9 +107,10 @@ public class EnrichmentInterceptor implements Interceptor {
         return filename;
     }
 
-    public static class Builder implements Interceptor.Builder {
+    public static class EnrichmentBuilder implements Interceptor.Builder {
         private Context ctx;
 
+        @Override
         public Interceptor build() {
             return new EnrichmentInterceptor(ctx);
         }
