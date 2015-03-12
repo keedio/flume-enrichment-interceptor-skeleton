@@ -8,9 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class EnrichmentInterceptorTest {
 
@@ -38,7 +36,9 @@ public class EnrichmentInterceptorTest {
         context.put(EnrichmentInterceptor.EVENT_TYPE, eventType);
         context.put(EnrichmentInterceptor.PROPERTIES_FILENAME, filename);
 
-        EnrichmentInterceptor interceptor = new EnrichmentInterceptor(context);
+        EnrichmentInterceptor.EnrichmentBuilder builder = new EnrichmentInterceptor.EnrichmentBuilder();
+        builder.configure(context);
+        EnrichmentInterceptor interceptor = (EnrichmentInterceptor) builder.build();
         interceptor.initialize();
         return interceptor;
     }
@@ -139,5 +139,22 @@ public class EnrichmentInterceptorTest {
             e.printStackTrace();
             Assert.fail();
         }
+    }
+
+    @Test
+    public void testListInterception() {
+        Event e1 = createEvent("hello1");
+        Event e2 = createEvent("hello2");
+        List<Event> eventList = new LinkedList<Event>();
+        eventList.add(e1);
+        eventList.add(e2);
+        int size = eventList.size();
+
+        String filename = "src/test/resources/interceptor.properties";
+        EnrichmentInterceptor interceptor = createInterceptor(filename, "DEFAULT");
+
+        List<Event> interceptedList = interceptor.intercept(eventList);
+
+        Assert.assertEquals(size, interceptedList.size());
     }
 }

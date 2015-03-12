@@ -68,4 +68,21 @@ public class EnrichedEventBodyTest {
             Assert.fail();
         }
     }
+
+    @Test
+    public void testToString() {
+        String message = "hello";
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("k1", "v1");
+
+        EnrichedEventBody enrichedEventBody = new EnrichedEventBody(data, message);
+        String toString = enrichedEventBody.toString();
+        try {
+            String toJson = JSONStringSerializer.toJSONString(enrichedEventBody);
+            Assert.assertEquals(toString, toJson);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            Assert.fail();
+        }
+    }
 }
