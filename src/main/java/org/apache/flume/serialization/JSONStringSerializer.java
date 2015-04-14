@@ -22,8 +22,15 @@ public class JSONStringSerializer {
         return mapper.writeValueAsString(object);
     }
 
-    public static <T> T fromJSONString(String s, Class<T> clazz) throws IOException {
-        return mapper.readValue(s, clazz);
+    public static <T> T fromJSONString(String string, Class<T> clazz) throws IOException {
+        return mapper.readValue(string, clazz);
     }
 
+    public static byte[] toBytes(Object object) throws IOException {
+        return mapper.writeValueAsBytes(object);
+    }
+
+    public static <T> T fromBytes(byte[] bytes, Class<T> clazz) throws IOException {
+        return mapper.readValue(bytes, clazz);
+    }
 }

@@ -1,0 +1,1 @@
+Protección común estándar:Impedir que los programas comunes ejecuten archivos desde la carpeta Temp # access protection # would deny execute # 5 # ACCESS_PROTECTION_VIOLATION_NOT_BLOCKED # VIRUSCAN8800 # VirusScan Enterprise # <NULL> # <NULL> # hip.file # <NULL> # _ #
