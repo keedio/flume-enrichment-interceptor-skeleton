@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.flume</groupId>
     <artifactId>flume-enrichment-interceptor</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>0.0.5-SNAPSHOT</version>
     <properties>
         <!-- Generic properties -->
         <java.version>1.7</java.version>
@@ -12,6 +12,7 @@
         <flume.core.version>1.5.2</flume.core.version>
         <jackson.version>1.9.13</jackson.version>
         <testng.version>6.1.1</testng.version>
+        <juniversalchardet.version>1.0.3</juniversalchardet.version>
     </properties>
     <distributionManagement>
         <repository>
@@ -47,6 +48,11 @@
             <artifactId>flume-ng-core</artifactId>
             <version>${flume.core.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.juniversalchardet</groupId>
+            <artifactId>juniversalchardet</artifactId>
+            <version>${juniversalchardet.version}</version>
         </dependency>
     </dependencies>
     
