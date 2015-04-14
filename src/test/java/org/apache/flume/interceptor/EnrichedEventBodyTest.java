@@ -1,11 +1,16 @@
 package org.apache.flume.interceptor;
 
 import org.apache.flume.serialization.JSONStringSerializer;
+import org.mozilla.universalchardet.UniversalDetector;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +36,25 @@ public class EnrichedEventBodyTest {
             e.printStackTrace();
             Assert.fail();
         }
+    }
+
+    @Test
+    public void testEventCharset() throws IOException {
+        String expectedCharset = StandardCharsets.UTF_8.name();
+
+        Path path = Paths.get("src/test/resources/notUTFString.txt");
+        byte[] payload = Files.readAllBytes(path);
+
+        EnrichedEventBody message = EnrichedEventBody.createFromEventBody(payload, false);
+        byte[] output = message.buildEventBody();
+
+        UniversalDetector detector = new UniversalDetector(null);
+        detector.handleData(output, 0, output.length);
+        detector.dataEnd();
+        String outputCharset = detector.getDetectedCharset();
+        detector.reset();
+
+        Assert.assertEquals(outputCharset, expectedCharset, "Invalid charset");
     }
 
     @Test

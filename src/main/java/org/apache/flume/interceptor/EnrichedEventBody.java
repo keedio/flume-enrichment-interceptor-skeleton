@@ -3,15 +3,18 @@ package org.apache.flume.interceptor;
 import org.apache.flume.serialization.JSONStringSerializer;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.mozilla.universalchardet.UniversalDetector;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 public class EnrichedEventBody {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(EnrichedEventBody.class);
+    private static final String DEFAULT_CHARSET = StandardCharsets.UTF_8.name();
 
     private Map<String, String> extraData;
     private String message;
@@ -33,18 +36,30 @@ public class EnrichedEventBody {
     }
 
     public static EnrichedEventBody createFromEventBody(byte[] payload, boolean isEnriched) throws IOException {
+
         EnrichedEventBody enrichedBody;
-        String message = new String(payload);
+
         if (isEnriched) {
-            enrichedBody = JSONStringSerializer.fromJSONString(message, EnrichedEventBody.class);
+            enrichedBody = JSONStringSerializer.fromBytes(payload, EnrichedEventBody.class);
         } else {
-            enrichedBody = new EnrichedEventBody(message);
+            // Detecting payload charset
+            UniversalDetector detector = new UniversalDetector(null);
+            detector.handleData(payload, 0, payload.length);
+            detector.dataEnd();
+            String charset = detector.getDetectedCharset();
+            detector.reset();
+
+            if (charset == null) {
+                charset = DEFAULT_CHARSET;
+            }
+            enrichedBody = new EnrichedEventBody(new String(payload, charset));
         }
+
         return enrichedBody;
     }
 
     public byte[] buildEventBody() throws IOException {
-        return JSONStringSerializer.toJSONString(this).getBytes();
+        return JSONStringSerializer.toBytes(this);
     }
 
     @Override
