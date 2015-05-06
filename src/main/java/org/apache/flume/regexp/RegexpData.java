@@ -31,11 +31,11 @@ public class RegexpData {
     private Map<String, String> regexpMap = new HashMap<>();
     private Map<String, String> matchesMap = new HashMap<>();
 
-    private final String PROPERTIES_REGEXP = "properties.regexp.";
-    private final String PROPERTIES_FOLDER_LOGS = "properties.folder.logs";
+    private final String CUSTOM_REGEXPS = "properties.regexp.";
+    private final String FOLDER_LOGS = "properties.folder.logs";
 
     public RegexpData(Context context) {
-        regexpMap = context.getSubProperties(PROPERTIES_REGEXP);
+        regexpMap = context.getSubProperties(CUSTOM_REGEXPS);
         try {
             matchesMap = matchFilesRegexp();
         } catch (IOException e) {
@@ -52,7 +52,7 @@ public class RegexpData {
      * @throws IOException
      */
     public Map<String, String> matchFilesRegexp() throws IOException {
-        Path start = Paths.get(PROPERTIES_FOLDER_LOGS);
+        Path start = Paths.get(FOLDER_LOGS);
 
         Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
             @Override

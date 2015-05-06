@@ -71,7 +71,7 @@ public class EnrichmentInterceptor implements Interceptor {
                 data.put(key, props.getProperty(key));
             }
             
-            //append matched regepx to data
+            //append matched regexp to data
             for (String key: regexpData.getMatchesMap().keySet()) {
                 data.put(key, regexpData.getMatchesMap().get(key));
             }

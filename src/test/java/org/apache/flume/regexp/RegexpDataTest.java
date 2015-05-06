@@ -28,6 +28,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+import com.google.common.collect.Maps;
+
 /**
  *
  * @author luislazaro
@@ -65,10 +67,146 @@ public class RegexpDataTest extends TestCase {
      * Test of matchFilesRegexp(), of class RegexpData
      */
     
-    public void testMatchFilesRegexp(){
-        
-        System.out.println("matchFilesRegexp");
+    public void testMatchFiles_SINGLE_Regexp(){
+         System.out.println("matchFiles_single_Regexp");
+         
+         Path file = Paths.get("/var/tmp/file.log");
+         
+         
+         Map<String,String> regexpMap = new HashMap<>();
+         Map<String,String> matchesMap = new HashMap<>();
+         
+         regexpMap.put("1","(?<date>\\d{4}-\\d{2}-\\d{2}+)\\s"
+                + "(?<time>\\d{2}:\\d{2}:\\d{2}+)\\s"
+                + "(?<time-taken>\\d{1}+)\\s");
+         
+         
+         
+         try {
+          List<String> linesfile = Files.readAllLines(file, Charset.defaultCharset());
+           for (String line : linesfile) {
+                    for (String regexp : regexpMap.values()) {
+                        Matcher m = Pattern.compile(regexp).matcher(line);
+                        matchesMap.putAll(m.namedGroups());
+                    }
+                }
+         } catch(IOException e){
+             e.printStackTrace();
+         }
+         
+         System.out.println(matchesMap);
         
     }
+    
+    public void testMatchFiles_SINGLE_Regexp_SEVERAL_lines(){
+         System.out.println("MatchFiles_SINGLE_Regexp_SEVERAL_lines_Single_file");
+         
+         Path file = Paths.get("/var/tmp/file3.log");
+         
+         
+         Map<String,String> regexpMap = new HashMap<>();
+         Map<String,String> matchesMap = new HashMap<>();
+         
+         regexpMap.put("1","(?<date>\\d{4}-\\d{2}-\\d{2}+)\\s"
+                + "(?<time>\\d{2}:\\d{2}:\\d{2}+)\\s"
+                + "(?<time-taken>\\d{1}+)\\s");
+         
+         
+         
+         try {
+          List<String> linesfile = Files.readAllLines(file, Charset.defaultCharset());
+           for (String line : linesfile) {
+                    for (String regexp : regexpMap.values()) {
+                        Matcher m = Pattern.compile(regexp).matcher(line);
+                        matchesMap.putAll(m.namedGroups());
+                    }
+                }
+         } catch(IOException e){
+             e.printStackTrace();
+         }
+         
+         System.out.println(matchesMap);
+        
+    }
+    
+    public void testMatchFiles_several_Regexp(){
+         System.out.println("matchFiles_several_Regexp");
+         
+         Path file = Paths.get("/var/tmp/file.log");
+         
+         
+         Map<String,String> regexpMap = new HashMap<>();
+         Map<String,String> matchesMap = new HashMap<>();
+         
+         regexpMap.put("1","(?<date>\\d{4}-\\d{2}-\\d{2}+)\\s");
+         regexpMap.put("2","(?<time>\\d{2}:\\d{2}:\\d{2}+)\\s");
+        
+         
+         
+         
+         try {
+          List<String> linesfile = Files.readAllLines(file, Charset.defaultCharset());
+           for (String line : linesfile) {
+                    for (String regexp : regexpMap.values()) {
+                        Matcher m = Pattern.compile(regexp).matcher(line);
+                        matchesMap.putAll(m.namedGroups());
+                    }
+                }
+         } catch(IOException e){
+             e.printStackTrace();
+         }
+         
+         System.out.println(matchesMap);
+        
+    }
+    
+    
+    
+//    public void testMatchFiles_several_Regexp_and_files(){
+//         System.out.println("matchFiles_several_Regexp_and_files");
+//         
+//         Path file = Paths.get("/var/tmp/file.log");
+//         Path file2 = Paths.get("/var/tmp/file2.log");
+//         
+//         
+//         Map<String,String> regexpMap = new HashMap<>();
+//         Map<String,String> matchesMap = new HashMap<>();
+//         
+//         regexpMap.put("1","(?<date>\\d{4}-\\d{2}-\\d{2}+)\\s");
+//         regexpMap.put("2","(?<time>\\d{2}:\\d{2}:\\d{2}+)\\s");
+//         
+//         
+//         
+//         
+//         try {
+//          List<String> linesfile = Files.readAllLines(file, Charset.defaultCharset());
+//           for (String line : linesfile) {
+//                    for (String regexp : regexpMap.values()) {
+//                        Matcher m = Pattern.compile(regexp).matcher(line);
+//                        matchesMap.putAll(m.namedGroups());
+//                        System.out.println(matchesMap);
+//                    }
+//                }
+//         } catch(IOException e){
+//             e.printStackTrace();
+//         }
+//         
+//         
+//         try {
+//          List<String> linesfile = Files.readAllLines(file2, Charset.defaultCharset());
+//           for (String line : linesfile) {
+//                    for (String regexp : regexpMap.values()) {
+//                        Matcher m = Pattern.compile(regexp).matcher(line);
+//                        matchesMap.putAll(m.namedGroups());
+//                        System.out.println(matchesMap);
+//                    }
+//                }
+//         } catch(IOException e){
+//             e.printStackTrace();
+//         }
+//         
+//         //System.out.println(matchesMap);
+//        
+//    }
     
 }
