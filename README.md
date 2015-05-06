@@ -47,9 +47,6 @@ a1.sources.r1.interceptors.i1.properties.regexp.2 = (?<nameA>regex)\\METACHARACT
 .......................
 a1.sources.r1.interceptors.i1.properties.regexp.n = 
 ```
-Althoug Java 7 allows named captured gropus where are using named-regexp 0.2.3 tony19's library because it adds
-interestings features, example  (?\<foo_foo\>) or (?\<foo \foo>) are not allowed in Java 7.
-Thanks to tony19: https://github.com/tony19/named-regexp
 
 Example of custom properties:
 ```ini
@@ -65,6 +62,12 @@ The enriched event body will contain:
 }
 ```
 
+Althoug Java 7 allows named captured groups, flume-enrich-interceptor is using named-regexp 0.2.3 tony19's library because it adds
+interestings features, example  (?\<foo_foo\>regex) or (?\<foo foo\>regex) are not allowed in Java 7.
+Thanks to tony19: https://github.com/tony19/named-regexp
+
+
 ## Changes from version 0.0.1
 
+Added regexp in flume's context.
 EnrichedEventBody.message is now a String (was byte[]).
