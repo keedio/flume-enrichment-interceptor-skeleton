@@ -36,7 +36,18 @@ a1.sources.r1.interceptors.i1.type = org.apache.flume.interceptor.EnrichmentInte
 a1.sources.r1.interceptors.i1.properties.filename = /path/to/filename.properties
 # The format of incoming events ( DEFAULT | enriched )
 a1.sources.r1.interceptors.i1.event.type = DEFAULT
+# Full path to folder that contains the files where to match the pattern
+a1.sources.r1.interceptors.i1.properties.folder.logs = /anotherPath/to
+
+# A map of regexps, where each regexp may be composed of Named captured groups according syntax (?<name>regex)
+a1.sources.r1.interceptors.i1.properties.regexp.1 = (?<name>regex)
+a1.sources.r1.interceptors.i1.properties.regexp.2 = (?<nameA>regex)\\METACHARACTER(?<nameB>regex)\\..
+.......................
+a1.sources.r1.interceptors.i1.properties.regexp.n = 
 ```
+Althoug Java 7 allows named captured gropus where are using named-regexp 0.2.3 tony19's library because it adds
+interestings features, example  (?<foo_foo>) or (?<foo foo>) are not allowed in Java 7.
+Thanks to tony19: https://github.com/tony19/named-regexp
 
 Example of custom properties:
 ```ini
