@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+import org.apache.flume.regexp.RegexpData;
+
 public class EnrichmentInterceptor implements Interceptor {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(EnrichmentInterceptor.class);
@@ -20,6 +22,8 @@ public class EnrichmentInterceptor implements Interceptor {
     private boolean isEnriched;
     private String filename;
     private Properties props;
+    
+    private RegexpData regexpData;
 
     public EnrichmentInterceptor(Context context) {
 
@@ -33,6 +37,8 @@ public class EnrichmentInterceptor implements Interceptor {
 
         this.filename = context.getString(PROPERTIES_FILENAME);
         this.props = new Properties();
+        
+        regexpData = new RegexpData(context);
 
     }
 
@@ -64,6 +70,12 @@ public class EnrichmentInterceptor implements Interceptor {
             for (String key : props.stringPropertyNames()) {
                 data.put(key, props.getProperty(key));
             }
+            
+            //append matched regepx to data
+            for (String key: regexpData.getMatchesMap().keySet()) {
+                data.put(key, regexpData.getMatchesMap().get(key));
+            }
+            
             enrichedBody.setExtraData(data);
             event.setBody(enrichedBody.buildEventBody());
 
