@@ -45,12 +45,13 @@ public class RegexpData {
     }
 
     /**
-     * Retrieve files from specified folder. For each found file, a list of its
-     * lines will be created. For each list created a regexp will be matched.
+     * Retrieve files from specified folder, for each found file, a list of its
+     * lines will be created, for each list created, a regexp will be matched.
+     * 
      * @return a map of matches as HashMap<(name-group-capture), match> 
      * @throws IOException
      */
-    private Map<String, String> matchFilesRegexp() throws IOException {
+    public Map<String, String> matchFilesRegexp() throws IOException {
         Path start = Paths.get(PROPERTIES_FOLDER_LOGS);
 
         Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
