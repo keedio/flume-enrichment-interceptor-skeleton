@@ -39,7 +39,7 @@ a1.sources.r1.interceptors.i1.event.type = DEFAULT
 
 
 # Full path to folder that contains the files where to match the pattern
-a1.sources.r1.interceptors.i1..folder.logs = /anotherPath/to
+a1.sources.r1.interceptors.i1.folder.logs = /anotherPath/to
 
 # A map of regexps, where each regexp may be composed of Named captured groups according syntax (?<name>regex)
 a1.sources.r1.interceptors.i1.custom.regexp.1 = (?<name>regex)
