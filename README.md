@@ -62,9 +62,10 @@ The enriched event body will contain:
 }
 ```
 
+Thanks to tony19: https://github.com/tony19/named-regexp
 Althoug Java 7 allows named captured groups, flume-enrich-interceptor is using named-regexp 0.2.3 tony19's library because it adds
 interestings features, example  (?\<foo_foo\>regex) or (?\<foo foo\>regex) are not allowed in Java 7.
-Thanks to tony19: https://github.com/tony19/named-regexp
+
 
 
 ## Changes from version 0.0.1
