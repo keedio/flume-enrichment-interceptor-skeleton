@@ -1,15 +1,9 @@
 package org.apache.flume.regexp;
 
 import java.util.Map;
-import java.util.List;
 import java.util.HashMap;
 
-import java.nio.file.Paths;
-import java.nio.file.Path;
-import java.nio.file.Files;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.FileVisitResult;
+
 
 import org.apache.flume.Context;
 
@@ -17,8 +11,6 @@ import com.google.code.regexp.Pattern;
 import com.google.code.regexp.Matcher;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
 
 /**
  *
@@ -52,8 +44,10 @@ public class RegexpData {
     public Map<String, String> applyRegexps(String message) {
 
         for (Map.Entry<String, Pattern> entry : regexpMap.entrySet()) {
-            Matcher m = entry.getValue().matcher(message);
-            matchesMap.putAll(m.namedGroups());
+            Matcher m = entry.getValue().matcher(message); 
+            if (m.find()){
+                matchesMap.putAll(m.namedGroups());
+            }
         }
         return matchesMap;
     }
