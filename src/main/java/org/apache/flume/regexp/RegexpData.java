@@ -27,36 +27,37 @@ import java.nio.charset.Charset;
 public class RegexpData {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(RegexpData.class);
-    
+
     private Map<String, Pattern> regexpMap = new HashMap<>();
     private Map<String, String> matchesMap = new HashMap<>();
 
     private final String CUSTOM_REGEXPS = "properties.regexp.";
-    private final String FOLDER_LOGS = "properties.folder.logs";
 
     public RegexpData(Context context) {
-        Map<String,String> subProperties = context.getSubProperties(CUSTOM_REGEXPS);
+        Map<String, String> subProperties = context.getSubProperties(CUSTOM_REGEXPS);
 
         for (Map.Entry<String, String> entry : subProperties.entrySet()) {
-            regexpMap.put(entry.getKey(), Pattern.compile(entry.getValue()) );
+            regexpMap.put(entry.getKey(), Pattern.compile(entry.getValue()));
         }
-
-
-    }
-
-    public Map<String, String> applyRegexps(String message){
-        //aplicar regexps al mensaje, de todas las regexps enriquequecemos
-        // usando la primera regexp que nos devuelva algun resultado
-
-        return null;
 
     }
 
     /**
-     * @return the matchesMap
+     * Aplicar regexps al mensaje, de todas las regexps enriquequecemos usando
+     * la primera regexp que nos devuelva algun resultado.
+     *
+     * @param message
+     * @return map
      */
-    public Map<String, String> getMatchesMap() {
+    public Map<String, String> applyRegexps(String message) {
+
+        for (Map.Entry<String, Pattern> entry : regexpMap.entrySet()) {
+            Matcher m = entry.getValue().matcher(message);
+            matchesMap.putAll(m.namedGroups());
+        }
         return matchesMap;
     }
+
+   
 
 }//endofclass
