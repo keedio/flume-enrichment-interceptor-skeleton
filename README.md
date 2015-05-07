@@ -38,14 +38,14 @@ a1.sources.r1.interceptors.i1.properties.filename = /path/to/filename.properties
 a1.sources.r1.interceptors.i1.event.type = DEFAULT
 
 
-# Full path to folder that contains the files where to match the pattern
-a1.sources.r1.interceptors.i1.folder.logs = /anotherPath/to
 
-# A map of regexps, where each regexp may be composed of Named captured groups according syntax (?<name>regex)
+# A map of regexps, where each regexp may be composed of Named captured groups according syntax (?<name>regex).
+# On applying regexps to the message, the first match will enrich de data.
 a1.sources.r1.interceptors.i1.custom.regexp.1 = (?<name>regex)
 a1.sources.r1.interceptors.i1.custom.regexp.2 = (?<nameA>regex)\\METACHARACTER(?<nameB>regex)\\..
 .......................
 a1.sources.r1.interceptors.i1.custom.regexp.n = 
+
 ```
 
 Example of custom properties:
@@ -62,10 +62,11 @@ The enriched event body will contain:
 }
 ```
 
+
 Thanks to tony19: https://github.com/tony19/named-regexp :
 
 Althoug Java 7 allows named captured groups, flume-enrich-interceptor is using named-regexp 0.2.3 tony19's library because it adds
-interestings features, example  (?\<foo_foo\>regex) or (?\<foo foo\>regex) are not allowed in Java 7.
+interesting features, example  (?\<foo_foo\>regex) or (?\<foo foo\>regex) are not allowed in Java 7.
 
 
 

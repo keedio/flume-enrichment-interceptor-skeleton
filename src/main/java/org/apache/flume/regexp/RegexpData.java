@@ -58,6 +58,4 @@ public class RegexpData {
         return matchesMap;
     }
 
-   
-
 }//endofclass
