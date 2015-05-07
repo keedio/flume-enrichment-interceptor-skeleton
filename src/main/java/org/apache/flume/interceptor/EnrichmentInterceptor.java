@@ -70,12 +70,11 @@ public class EnrichmentInterceptor implements Interceptor {
             for (String key : props.stringPropertyNames()) {
                 data.put(key, props.getProperty(key));
             }
-            
-            //append matched regexp to data
-            for (String key: regexpData.getMatchesMap().keySet()) {
-                data.put(key, regexpData.getMatchesMap().get(key));
-            }
-            
+
+
+            Map<String, String> regexpResults = regexpData.applyRegexps(enrichedBody.getMessage());
+            data.putAll(regexpResults);
+
             enrichedBody.setExtraData(data);
             event.setBody(enrichedBody.buildEventBody());
 

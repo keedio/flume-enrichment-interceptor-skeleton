@@ -28,54 +28,27 @@ public class RegexpData {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(RegexpData.class);
     
-    private Map<String, String> regexpMap = new HashMap<>();
+    private Map<String, Pattern> regexpMap = new HashMap<>();
     private Map<String, String> matchesMap = new HashMap<>();
 
     private final String CUSTOM_REGEXPS = "properties.regexp.";
     private final String FOLDER_LOGS = "properties.folder.logs";
 
     public RegexpData(Context context) {
-        regexpMap = context.getSubProperties(CUSTOM_REGEXPS);
-        try {
-            matchesMap = matchFilesRegexp();
-        } catch (IOException e) {
-            logger.error("", e);
+        Map<String,String> subProperties = context.getSubProperties(CUSTOM_REGEXPS);
+
+        for (Map.Entry<String, String> entry : subProperties.entrySet()) {
+            regexpMap.put(entry.getKey(), Pattern.compile(entry.getValue()) );
         }
+
 
     }
 
-    /**
-     * Retrieve files from specified folder, for each found file, a list of its
-     * lines will be created, for each list created, a regexp will be matched.
-     * 
-     * @return a map of matches as HashMap<(name-group-capture), match> 
-     * @throws IOException
-     */
-    public Map<String, String> matchFilesRegexp() throws IOException {
-        Path start = Paths.get(FOLDER_LOGS);
+    public Map<String, String> applyRegexps(String message){
+        //aplicar regexps al mensaje, de todas las regexps enriquequecemos
+        // usando la primera regexp que nos devuelva algun resultado
 
-        Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
-            @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-
-                List<String> linesfile = Files.readAllLines(file, Charset.defaultCharset());
-
-                for (String line : linesfile) {
-                    for (String regexp : regexpMap.values()) {
-                        Matcher m = Pattern.compile(regexp).matcher(line);
-                        matchesMap.putAll(m.namedGroups());
-                    }
-                }
-                return FileVisitResult.CONTINUE;
-            }
-
-            @Override
-            public FileVisitResult visitFileFailed(Path file, IOException e) throws IOException {
-                return FileVisitResult.CONTINUE;
-            }
-
-        });
-        return matchesMap;
+        return null;
 
     }
 
