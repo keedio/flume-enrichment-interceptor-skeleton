@@ -62,6 +62,29 @@ The enriched event body will contain:
 }
 ```
 
+Besides the properties of the file, the fields extracted by regexp are added.
+The fields of the first regexp having correspondence with the log entry are
+appended as new pairs in extradata and if any correspondence regexp has no match,
+nothing is added:
+
+Example of regexp:
+```ini
+a1.sources.r1.interceptors.i1.custom.regexp.1 = (?<date>\\d{4}-\\d{2}-\\d{2}+)\\s(?<time>\\d{2}:\\d{2}:\\d{2}+)\\s
+```
+Example of log to match:
+```ini
+"2015-04-23 07:16:08 (whatever)"
+```
+
+The enriched event body will contain two new pairs in the extradata:
+```json
+{
+ "extraData":{"hostname": "localhost", "domain": "localdomain", "date=2015-04-23", "time=07:16:08"},
+ "message": "the original body string"
+}
+```
+
+
 
 Thanks to tony19: https://github.com/tony19/named-regexp :
 
