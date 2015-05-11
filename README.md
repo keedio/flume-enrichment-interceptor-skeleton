@@ -79,7 +79,7 @@ Example of log to match:
 The enriched event body will contain two new pairs in the extradata:
 ```json
 {
- "extraData":{"hostname": "localhost", "domain": "localdomain", "date=2015-04-23", "time=07:16:08"},
+ "extraData":{"hostname": "localhost", "domain": "localdomain", "date": "2015-04-23", "time": "07:16:08"},
  "message": "the original body string"
 }
 ```
