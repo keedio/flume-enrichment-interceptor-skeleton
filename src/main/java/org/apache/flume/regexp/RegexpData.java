@@ -47,6 +47,7 @@ public class RegexpData {
             Matcher m = entry.getValue().matcher(message); 
             if (m.find()){
                 matchesMap.putAll(m.namedGroups());
+                break;
             }
         }
         return matchesMap;
