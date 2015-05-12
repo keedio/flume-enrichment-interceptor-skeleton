@@ -1,5 +1,7 @@
-package org.apache.flume.interceptor;
+package org.keedio.flume.interceptor.enrichment.interceptor;
 
+import org.keedio.flume.interceptor.enrichment.interceptor.EnrichmentInterceptor;
+import org.keedio.flume.interceptor.enrichment.interceptor.EnrichedEventBody;
 import junit.framework.Assert;
 import org.apache.flume.Context;
 import org.apache.flume.Event;

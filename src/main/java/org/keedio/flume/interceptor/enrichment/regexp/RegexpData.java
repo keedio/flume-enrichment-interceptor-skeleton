@@ -1,4 +1,4 @@
-package org.apache.flume.regexp;
+package org.keedio.flume.interceptor.enrichment.regexp;
 
 import java.util.Map;
 import java.util.HashMap;

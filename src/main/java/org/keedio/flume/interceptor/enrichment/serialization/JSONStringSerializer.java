@@ -1,4 +1,4 @@
-package org.apache.flume.serialization;
+package org.keedio.flume.interceptor.enrichment.serialization;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;

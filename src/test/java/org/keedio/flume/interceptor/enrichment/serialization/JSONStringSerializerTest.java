@@ -1,6 +1,7 @@
-package org.apache.flume.serialization;
+package org.keedio.flume.interceptor.enrichment.serialization;
 
-import org.apache.flume.interceptor.EnrichedEventBody;
+import org.keedio.flume.interceptor.enrichment.serialization.JSONStringSerializer;
+import org.keedio.flume.interceptor.enrichment.interceptor.EnrichedEventBody;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;

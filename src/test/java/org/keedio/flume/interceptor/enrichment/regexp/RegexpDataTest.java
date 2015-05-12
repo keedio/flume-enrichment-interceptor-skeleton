@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.apache.flume.regexp;
+package org.keedio.flume.interceptor.enrichment.regexp;
 
 import java.util.Map;
 import junit.framework.TestCase;

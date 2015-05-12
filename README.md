@@ -95,5 +95,7 @@ interesting features, example  (?\<foo_foo\>regex) or (?\<foo foo\>regex) are no
 
 ## Changes from version 0.0.1
 
+Update package's name convention.
 Added regexp in flume's context.
+
 EnrichedEventBody.message is now a String (was byte[]).

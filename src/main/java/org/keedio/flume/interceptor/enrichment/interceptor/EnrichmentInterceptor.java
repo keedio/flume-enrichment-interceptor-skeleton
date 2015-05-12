@@ -1,4 +1,4 @@
-package org.apache.flume.interceptor;
+package org.keedio.flume.interceptor.enrichment.interceptor;
 
 import org.apache.flume.Context;
 import org.apache.flume.Event;
@@ -9,8 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import org.apache.flume.interceptor.Interceptor;
 
-import org.apache.flume.regexp.RegexpData;
+import org.keedio.flume.interceptor.enrichment.regexp.RegexpData;
 
 public class EnrichmentInterceptor implements Interceptor {
 
