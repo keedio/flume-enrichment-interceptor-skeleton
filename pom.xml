@@ -4,11 +4,11 @@
     <artifactId>flume-enrichment-interceptor</artifactId>
     <version>0.0.5-SNAPSHOT</version>
     
-     <parent>
+     <!---<parent>
         <groupId>org.keedio</groupId>
         <artifactId>keedio-shaded-parent</artifactId>
         <version>0.1.0</version>
-    </parent>
+    </parent>-->
     
     <properties>
         <!-- Generic properties -->
