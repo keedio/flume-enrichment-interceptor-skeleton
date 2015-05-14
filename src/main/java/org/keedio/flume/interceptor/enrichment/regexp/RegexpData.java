@@ -23,7 +23,7 @@ public class RegexpData {
     private Map<String, Pattern> regexpMap = new HashMap<>();
     private Map<String, String> matchesMap = new HashMap<>();
 
-    private final String CUSTOM_REGEXPS = "properties.regexp.";
+    private final String CUSTOM_REGEXPS = "custom.regexp.";
 
     public RegexpData(Context context) {
         Map<String, String> subProperties = context.getSubProperties(CUSTOM_REGEXPS);
@@ -46,8 +46,10 @@ public class RegexpData {
         for (Map.Entry<String, Pattern> entry : regexpMap.entrySet()) {
             Matcher m = entry.getValue().matcher(message); 
             if (m.find()){
-                matchesMap.putAll(m.namedGroups());
+                matchesMap.putAll(m.namedGroups());                
                 break;
+            } else {
+                logger.info("no match");
             }
         }
         return matchesMap;
