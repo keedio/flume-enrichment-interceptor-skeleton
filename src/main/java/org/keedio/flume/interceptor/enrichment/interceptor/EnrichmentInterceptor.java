@@ -72,9 +72,17 @@ public class EnrichmentInterceptor implements Interceptor {
                 data.put(key, props.getProperty(key));
             }
 
-
+            logger.info(enrichedBody.getMessage());
             Map<String, String> regexpResults = regexpData.applyRegexps(enrichedBody.getMessage());
+            
+            Iterator it = regexpResults.entrySet().iterator();
+            while(it.hasNext()){
+                Map.Entry e = (Map.Entry)it.next();
+                logger.info("PAR: !!!!!!!!!! " + e .getKey() + " " + e.getValue());
+            }
+            
             data.putAll(regexpResults);
+            
 
             enrichedBody.setExtraData(data);
             event.setBody(enrichedBody.buildEventBody());
