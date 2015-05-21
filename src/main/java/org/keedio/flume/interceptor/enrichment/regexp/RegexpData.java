@@ -2,15 +2,11 @@ package org.keedio.flume.interceptor.enrichment.regexp;
 
 import java.util.Map;
 import java.util.HashMap;
-
-
-
 import org.apache.flume.Context;
 
 import com.google.code.regexp.Pattern;
 import com.google.code.regexp.Matcher;
 import org.slf4j.LoggerFactory;
-
 
 /**
  *
@@ -44,12 +40,10 @@ public class RegexpData {
     public Map<String, String> applyRegexps(String message) {
 
         for (Map.Entry<String, Pattern> entry : regexpMap.entrySet()) {
-            Matcher m = entry.getValue().matcher(message); 
-            if (m.find()){
-                matchesMap.putAll(m.namedGroups());                
+            Matcher m = entry.getValue().matcher(message);
+            if (m.find()) {
+                matchesMap.putAll(m.namedGroups());
                 break;
-            } else {
-                logger.info("no match");
             }
         }
         return matchesMap;
