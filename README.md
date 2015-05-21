@@ -36,6 +36,16 @@ a1.sources.r1.interceptors.i1.type = org.apache.flume.interceptor.EnrichmentInte
 a1.sources.r1.interceptors.i1.properties.filename = /path/to/filename.properties
 # The format of incoming events ( DEFAULT | enriched )
 a1.sources.r1.interceptors.i1.event.type = DEFAULT
+
+
+
+# A map of regexps, where each regexp may be composed of Named captured groups according syntax (?<name>regex).
+# On applying regexps to the message, the first match will enrich de data.
+a1.sources.r1.interceptors.i1.custom.regexp.1 = (?<name>regex)
+a1.sources.r1.interceptors.i1.custom.regexp.2 = (?<nameA>regex)\\METACHARACTER(?<nameB>regex)\\..
+.......................
+a1.sources.r1.interceptors.i1.custom.regexp.n = 
+
 ```
 
 Example of custom properties:
@@ -52,6 +62,40 @@ The enriched event body will contain:
 }
 ```
 
+Besides the properties of the file, the fields extracted by regexp are added.
+The fields of the first regexp having correspondence with the log entry are
+appended as new pairs in extradata and if any correspondence regexp has no match,
+nothing is added:
+
+Example of regexp:
+```ini
+a1.sources.r1.interceptors.i1.custom.regexp.1 = (?<date>\\d{4}-\\d{2}-\\d{2}+)\\s(?<time>\\d{2}:\\d{2}:\\d{2}+)\\s
+```
+Example of log to match:
+```ini
+"2015-04-23 07:16:08 (whatever)"
+```
+
+The enriched event body will contain two new pairs in the extradata:
+```json
+{
+ "extraData":{"hostname": "localhost", "domain": "localdomain", "date": "2015-04-23", "time": "07:16:08"},
+ "message": "the original body string"
+}
+```
+
+
+
+Thanks to tony19: https://github.com/tony19/named-regexp :
+
+Althoug Java 7 allows named captured groups, flume-enrich-interceptor is using named-regexp 0.2.3 tony19's library because it adds
+interesting features, example  (?\<foo_foo\>regex) or (?\<foo foo\>regex) are not allowed in Java 7.
+
+
+
 ## Changes from version 0.0.1
+
+Update package's name convention.
+Added regexp in flume's context.
 
 EnrichedEventBody.message is now a String (was byte[]).

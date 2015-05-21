@@ -1,6 +1,6 @@
-package org.apache.flume.interceptor;
+package org.keedio.flume.interceptor.enrichment.interceptor;
 
-import org.apache.flume.serialization.JSONStringSerializer;
+import org.keedio.flume.interceptor.enrichment.serialization.JSONStringSerializer;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.mozilla.universalchardet.UniversalDetector;
