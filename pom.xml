@@ -1,8 +1,49 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.flume</groupId>
+    <groupId>org.keedio.flume.interceptor.enrichment</groupId>
     <artifactId>flume-enrichment-interceptor</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.7</version>
+    <packaging>jar</packaging>
+    
+    <name>Flume-enrichment-interceptor</name>
+    <description>This project provides an interceptor to enrich event body with custom data.</description>
+    
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    
+    <url>https://github.com/keedio/flume-enrichment-interceptor-skeleton</url>
+    
+    <developers>
+        <developer>
+            <name>Luca Rosellini</name>
+            <email>lrosellini@keedio.org</email>
+            <organization>Keedio</organization>
+            <organizationUrl>http://www.keedio.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Emmanuelle Raffenne</name>
+            <email>eraffenne@keedio.org</email>
+            <organization>Keedio</organization>
+            <organizationUrl>http://www.keedio.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Luis Lázaro Medina</name>
+            <email>lalazaro@keedio.org</email>
+            <organization>Keedio</organization>
+            <organizationUrl>http://www.keedio.com</organizationUrl>
+        </developer>
+    </developers>
+    
+     <scm>
+        <connection>scm:git:git@github.com:keedio/flume-enrichment-interceptor-skeleton.git</connection>
+        <developerConnection>scm:git:git@github.com:keedio/flume-enrichment-interceptor-skeleton.git</developerConnection>
+        <url>https://github.com/keedio/flume-enrichment-interceptor-skeleton</url>
+    </scm>
+    
     <properties>
         <!-- Generic properties -->
         <java.version>1.7</java.version>
@@ -14,18 +55,7 @@
         <testng.version>6.1.1</testng.version>
         <juniversalchardet.version>1.0.3</juniversalchardet.version>
     </properties>
-    <distributionManagement>
-        <repository>
-            <id>keedio-releases</id>
-            <name>Keedio Releases</name>
-            <url>http://jenkins.keedio.com:8081/nexus/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>keedio-snapshots</id>
-            <name>Keedio Snapshots</name>
-            <url>http://jenkins.keedio.com:8081/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+    
     <dependencies>
         <dependency>
             <groupId>org.testng</groupId>
@@ -54,6 +84,11 @@
             <artifactId>juniversalchardet</artifactId>
             <version>${juniversalchardet.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.tony19</groupId>
+            <artifactId>named-regexp</artifactId>
+            <version>0.2.3</version>
+        </dependency>
     </dependencies>
     
     <build>
@@ -77,9 +112,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
         </plugins>

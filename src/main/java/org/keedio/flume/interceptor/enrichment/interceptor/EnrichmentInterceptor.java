@@ -1,4 +1,4 @@
-package org.apache.flume.interceptor;
+package org.keedio.flume.interceptor.enrichment.interceptor;
 
 import org.apache.flume.Context;
 import org.apache.flume.Event;
@@ -9,6 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import org.apache.flume.interceptor.Interceptor;
+
+import org.keedio.flume.interceptor.enrichment.regexp.RegexpData;
 
 public class EnrichmentInterceptor implements Interceptor {
 
@@ -20,6 +23,8 @@ public class EnrichmentInterceptor implements Interceptor {
     private boolean isEnriched;
     private String filename;
     private Properties props;
+    
+    private RegexpData regexpData;
 
     public EnrichmentInterceptor(Context context) {
 
@@ -33,6 +38,8 @@ public class EnrichmentInterceptor implements Interceptor {
 
         this.filename = context.getString(PROPERTIES_FILENAME);
         this.props = new Properties();
+        
+        regexpData = new RegexpData(context);
 
     }
 
@@ -64,6 +71,11 @@ public class EnrichmentInterceptor implements Interceptor {
             for (String key : props.stringPropertyNames()) {
                 data.put(key, props.getProperty(key));
             }
+            
+            Map<String, String> regexpResults = regexpData.applyRegexps(enrichedBody.getMessage());
+            
+            data.putAll(regexpResults);
+            
             enrichedBody.setExtraData(data);
             event.setBody(enrichedBody.buildEventBody());
 

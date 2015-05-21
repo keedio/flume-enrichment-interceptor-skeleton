@@ -1,6 +1,7 @@
-package org.apache.flume.interceptor;
+package org.keedio.flume.interceptor.enrichment.interceptor;
 
-import org.apache.flume.serialization.JSONStringSerializer;
+import org.keedio.flume.interceptor.enrichment.interceptor.EnrichedEventBody;
+import org.keedio.flume.interceptor.enrichment.serialization.JSONStringSerializer;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -89,6 +90,23 @@ public class EnrichedEventBodyTest {
 
         } catch (IOException e) {
             e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testToString() {
+        String message = "hello";
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("k1", "v1");
+
+        EnrichedEventBody enrichedEventBody = new EnrichedEventBody(data, message);
+        String toString = enrichedEventBody.toString();
+        try {
+            String toJson = JSONStringSerializer.toJSONString(enrichedEventBody);
+            Assert.assertEquals(toString, toJson);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
             Assert.fail();
         }
     }
