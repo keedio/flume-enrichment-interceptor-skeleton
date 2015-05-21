@@ -3,12 +3,46 @@
     <groupId>org.keedio.flume.interceptor.enrichment</groupId>
     <artifactId>flume-enrichment-interceptor</artifactId>
     <version>0.0.6-SNAPSHOT</version>
+    <packaging>jar</packaging>
     
-     <!---<parent>
-        <groupId>org.keedio</groupId>
-        <artifactId>keedio-shaded-parent</artifactId>
-        <version>0.1.0</version>
-    </parent>-->
+    <name>Flume-enrichment-interceptor</name>
+    <description>This project provides an interceptor to enrich event body with custom data.</description>
+    
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    
+    <url>https://github.com/keedio/flume-enrichment-interceptor-skeleton</url>
+    
+    <developers>
+        <developer>
+            <name>Luca Rosellini</name>
+            <email>lrosellini@keedio.org</email>
+            <organization>Keedio</organization>
+            <organizationUrl>http://www.keedio.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Emmanuelle Raffenne</name>
+            <email>eraffenne@keedio.org</email>
+            <organization>Keedio</organization>
+            <organizationUrl>http://www.keedio.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Luis Lázaro Medina</name>
+            <email>lalazaro@keedio.org</email>
+            <organization>Keedio</organization>
+            <organizationUrl>http://www.keedio.com</organizationUrl>
+        </developer>
+    </developers>
+    
+     <scm>
+        <connection>scm:git:git@github.com:keedio/flume-enrichment-interceptor-skeleton.git</connection>
+        <developerConnection>scm:git:git@github.com:keedio/flume-enrichment-interceptor-skeleton.git</developerConnection>
+        <url>https://github.com/keedio/flume-enrichment-interceptor-skeleton</url>
+    </scm>
     
     <properties>
         <!-- Generic properties -->
@@ -21,18 +55,7 @@
         <testng.version>6.1.1</testng.version>
         <juniversalchardet.version>1.0.3</juniversalchardet.version>
     </properties>
-    <distributionManagement>
-        <repository>
-            <id>keedio-releases</id>
-            <name>Keedio Releases</name>
-            <url>http://jenkins.keedio.com:8081/nexus/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>keedio-snapshots</id>
-            <name>Keedio Snapshots</name>
-            <url>http://jenkins.keedio.com:8081/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+    
     <dependencies>
         <dependency>
             <groupId>org.testng</groupId>
