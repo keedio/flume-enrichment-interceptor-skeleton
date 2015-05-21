@@ -91,7 +91,14 @@ Thanks to tony19: https://github.com/tony19/named-regexp :
 Althoug Java 7 allows named captured groups, flume-enrich-interceptor is using named-regexp 0.2.3 tony19's library because it adds
 interesting features, example  (?\<foo_foo\>regex) or (?\<foo foo\>regex) are not allowed in Java 7.
 
+## Needed dependencies
 
+You need to deploy the following jars in order to use this interceptor:
+
+* http://search.maven.org/remotecontent?filepath=com/github/tony19/named-regexp/0.2.3/named-regexp-0.2.3.jar
+* http://search.maven.org/remotecontent?filepath=com/googlecode/juniversalchardet/juniversalchardet/1.0.3/juniversalchardet-1.0.3.jar
+* http://search.maven.org/remotecontent?filepath=org/codehaus/jackson/jackson-mapper-asl/1.9.13/jackson-mapper-asl-1.9.13.jar
+* http://search.maven.org/remotecontent?filepath=org/codehaus/jackson/jackson-core-asl/1.9.13/jackson-core-asl-1.9.13.jar
 
 ## Changes from version 0.0.1
 

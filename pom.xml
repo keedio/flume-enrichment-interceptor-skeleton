@@ -67,11 +67,13 @@
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
             <version>${jackson.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
             <version>${jackson.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.flume</groupId>
@@ -83,11 +85,13 @@
             <groupId>com.googlecode.juniversalchardet</groupId>
             <artifactId>juniversalchardet</artifactId>
             <version>${juniversalchardet.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.tony19</groupId>
             <artifactId>named-regexp</artifactId>
             <version>0.2.3</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     
