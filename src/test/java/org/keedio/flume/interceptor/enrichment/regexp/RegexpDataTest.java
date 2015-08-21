@@ -68,7 +68,7 @@ public class RegexpDataTest extends TestCase {
     public void testMatchFiles_SINGLE_Regexp() {
         System.out.println("matchFiles_single_Regexp");
 
-        Path file = Paths.get("srct/test/resources/file.log");
+        Path file = Paths.get("src/test/resources/file.log");
 
         Map<String, String> regexpMap = new HashMap<>();
         Map<String, String> matchesMap = new HashMap<>();
@@ -96,7 +96,7 @@ public class RegexpDataTest extends TestCase {
     public void testMatchFiles_SINGLE_Regexp_SEVERAL_lines() {
         System.out.println("MatchFiles_SINGLE_Regexp_SEVERAL_lines_Single_file");
 
-        Path file = Paths.get("srct/test/resources/file3.log");
+        Path file = Paths.get("src/test/resources/file3.log");
 
         Map<String, String> regexpMap = new HashMap<>();
         Map<String, String> matchesMap = new HashMap<>();
@@ -124,7 +124,7 @@ public class RegexpDataTest extends TestCase {
     public void testMatchFiles_several_Regexp() {
         System.out.println("matchFiles_several_Regexp");
 
-        Path file = Paths.get("srct/test/resources/file.log");
+        Path file = Paths.get("src/test/resources/file.log");
 
         Map<String, String> regexpMap = new HashMap<>();
         Map<String, String> matchesMap = new HashMap<>();
