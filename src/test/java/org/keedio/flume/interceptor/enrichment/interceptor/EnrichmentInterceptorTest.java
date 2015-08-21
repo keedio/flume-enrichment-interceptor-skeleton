@@ -1,15 +1,24 @@
 package org.keedio.flume.interceptor.enrichment.interceptor;
 
+import com.google.common.hash.Hashing;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.keedio.flume.interceptor.enrichment.interceptor.EnrichmentInterceptor;
 import org.keedio.flume.interceptor.enrichment.interceptor.EnrichedEventBody;
 import junit.framework.Assert;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.event.EventBuilder;
+import org.mozilla.universalchardet.UniversalDetector;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 public class EnrichmentInterceptorTest {
@@ -37,6 +46,10 @@ public class EnrichmentInterceptorTest {
         Context context = new Context();
         context.put(EnrichmentInterceptor.EVENT_TYPE, eventType);
         context.put(EnrichmentInterceptor.PROPERTIES_FILENAME, filename);
+        return createInterceptor(context);
+    }
+
+    private EnrichmentInterceptor createInterceptor(Context context) {
 
         EnrichmentInterceptor.EnrichmentBuilder builder = new EnrichmentInterceptor.EnrichmentBuilder();
         builder.configure(context);
@@ -49,6 +62,12 @@ public class EnrichmentInterceptorTest {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("h1", "value1");
         return EventBuilder.withBody(message.getBytes(), headers);
+    }
+
+    private Event createEvent(byte[] message) {
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("h1", "value1");
+        return EventBuilder.withBody(message, headers);
     }
 
     // Test suite
@@ -100,6 +119,38 @@ public class EnrichmentInterceptorTest {
             logger.info("props are: " + interceptor.getProps());
             logger.info("extradata is: " + enrichedEventBody.getExtraData());
             Assert.assertEquals(propertiesToMap(interceptor.getProps()), enrichedEventBody.getExtraData());
+            Assert.assertNull(enrichedEventBody.getExtraData().get(EnrichmentInterceptor.EXTRADATA_HASH_KEY));
+        } catch (IOException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testSingleInterceptionWithHash() throws NoSuchAlgorithmException {
+        try {
+            Event event = createEvent("hello");
+            String originalMessage = new String(event.getBody());
+
+            String filename = "src/test/resources/interceptor.properties";
+            Context context = new Context();
+            context.put(EnrichmentInterceptor.EVENT_TYPE, "DEFAULT");
+            context.put(EnrichmentInterceptor.PROPERTIES_FILENAME, filename);
+            context.put(EnrichmentInterceptor.ENABLE_MESSAGE_HASHING, Boolean.TRUE.toString());
+
+            EnrichmentInterceptor interceptor = createInterceptor(context);
+
+            interceptor.intercept(event);
+
+            EnrichedEventBody enrichedEventBody = EnrichedEventBody.createFromEventBody(event.getBody(), true);
+            String enrichedMessage = enrichedEventBody.getMessage();
+
+            logger.info("original message is: " + originalMessage);
+            logger.info("enriched message is: " + enrichedMessage);
+            Assert.assertEquals(originalMessage, enrichedMessage);
+
+            Assert.assertEquals(Hashing.sha256().hashString(originalMessage).toString(),
+                    enrichedEventBody.getExtraData().get(EnrichmentInterceptor.EXTRADATA_HASH_KEY));
         } catch (IOException e) {
             e.printStackTrace();
             Assert.fail();
@@ -144,6 +195,50 @@ public class EnrichmentInterceptorTest {
     }
 
     @Test
+    public void testMultipleInterceptionWithHash() {
+
+        try {
+            // First interception. Inbound message has default format.
+            Event event = createEvent("hello");
+            String originalMessage = new String(event.getBody());
+
+            String filename = "src/test/resources/interceptor.properties";
+            Context context = new Context();
+            context.put(EnrichmentInterceptor.EVENT_TYPE, "DEFAULT");
+            context.put(EnrichmentInterceptor.PROPERTIES_FILENAME, filename);
+            context.put(EnrichmentInterceptor.ENABLE_MESSAGE_HASHING, Boolean.TRUE.toString());
+
+            EnrichmentInterceptor interceptor = createInterceptor(context);
+
+            interceptor.intercept(event);
+
+            // Second interception. Inbound message is enriched.
+            String filename2 = "src/test/resources/interceptor2.properties";
+            context = new Context();
+            context.put(EnrichmentInterceptor.EVENT_TYPE, "enriched");
+            context.put(EnrichmentInterceptor.PROPERTIES_FILENAME, filename2);
+            context.put(EnrichmentInterceptor.ENABLE_MESSAGE_HASHING, Boolean.TRUE.toString());
+            EnrichmentInterceptor interceptor2 = createInterceptor(context);
+
+            interceptor2.intercept(event);
+
+            EnrichedEventBody enrichedEventBody = EnrichedEventBody.createFromEventBody(event.getBody(), true);
+            String enrichedMessage = enrichedEventBody.getMessage();
+
+
+            logger.info("original message is: " + originalMessage);
+            logger.info("enriched message is: " + enrichedMessage);
+            Assert.assertEquals(originalMessage, enrichedMessage);
+
+            Assert.assertEquals(Hashing.sha256().hashString(originalMessage).toString(),
+                    enrichedEventBody.getExtraData().get(EnrichmentInterceptor.EXTRADATA_HASH_KEY));
+        } catch (IOException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+    @Test
     public void testListInterception() {
         Event e1 = createEvent("hello1");
         Event e2 = createEvent("hello2");
@@ -158,5 +253,42 @@ public class EnrichmentInterceptorTest {
         List<Event> interceptedList = interceptor.intercept(eventList);
 
         Assert.assertEquals(size, interceptedList.size());
+    }
+
+    @Test
+    public void testInterceptionWithNonStandardCharset() throws IOException {
+
+        Path path = Paths.get("src/test/resources/notUTFString.txt");
+        byte[] payload = Files.readAllBytes(path);
+
+        Event event = createEvent(payload);
+
+        String filename = "src/test/resources/interceptor.properties";
+        Context context = new Context();
+        context.put(EnrichmentInterceptor.EVENT_TYPE, "DEFAULT");
+        context.put(EnrichmentInterceptor.PROPERTIES_FILENAME, filename);
+        context.put(EnrichmentInterceptor.ENABLE_MESSAGE_HASHING, Boolean.TRUE.toString());
+
+        EnrichmentInterceptor interceptor = createInterceptor(context);
+
+        interceptor.intercept(event);
+
+        EnrichedEventBody enrichedEventBody = EnrichedEventBody.createFromEventBody(event.getBody(), true);
+        String enrichedMessage = enrichedEventBody.getMessage();
+
+        UniversalDetector detector = new UniversalDetector(null);
+        detector.handleData(payload, 0, payload.length);
+        detector.dataEnd();
+        String outputCharset = detector.getDetectedCharset();
+        detector.reset();
+
+        String originalMessage = new String(payload, outputCharset);
+
+        logger.info("original message is: " + originalMessage);
+        logger.info("enriched message is: " + enrichedMessage);
+        Assert.assertEquals(originalMessage, enrichedMessage);
+
+        Assert.assertEquals(Hashing.sha256().hashString(originalMessage).toString(),
+                enrichedEventBody.getExtraData().get(EnrichmentInterceptor.EXTRADATA_HASH_KEY));
     }
 }

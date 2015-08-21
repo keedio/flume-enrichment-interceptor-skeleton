@@ -1,5 +1,7 @@
 package org.keedio.flume.interceptor.enrichment.interceptor;
 
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.slf4j.LoggerFactory;
@@ -19,12 +21,17 @@ public class EnrichmentInterceptor implements Interceptor {
 
     static final String EVENT_TYPE = "event.type";
     static final String PROPERTIES_FILENAME = "properties.filename";
+    static final String ENABLE_MESSAGE_HASHING = "enable.message.hashing";
+    static final String EXTRADATA_HASH_KEY = "hash";
 
     private boolean isEnriched;
     private String filename;
     private Properties props;
     
     private RegexpData regexpData;
+
+    private HashFunction hashFunction;
+    private boolean isMessageDigestEnabled = false;
 
     public EnrichmentInterceptor(Context context) {
 
@@ -36,11 +43,26 @@ public class EnrichmentInterceptor implements Interceptor {
             this.isEnriched = false;
         }
 
+        isMessageDigestEnabled = context.getBoolean(ENABLE_MESSAGE_HASHING, Boolean.FALSE);
+
         this.filename = context.getString(PROPERTIES_FILENAME);
         this.props = new Properties();
         
         regexpData = new RegexpData(context);
 
+        hashFunction = Hashing.sha256();
+    }
+
+    /**
+     * Adds EXTRADATA_HASH_KEY to extraData if digesting has been enabled
+     * @param event
+     */
+    private void enrichWithMessageDigest(EnrichedEventBody event){
+        if (isMessageDigestEnabled){
+            String payload = event.getMessage();
+            String hash = hashFunction.hashString(payload).toString();
+            event.getExtraData().put(EXTRADATA_HASH_KEY,hash);
+        }
     }
 
     @Override
@@ -71,6 +93,8 @@ public class EnrichmentInterceptor implements Interceptor {
             for (String key : props.stringPropertyNames()) {
                 data.put(key, props.getProperty(key));
             }
+
+            enrichWithMessageDigest(enrichedBody);
             
             Map<String, String> regexpResults = regexpData.applyRegexps(enrichedBody.getMessage());
             
