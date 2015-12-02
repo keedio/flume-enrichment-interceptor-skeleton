@@ -31,7 +31,7 @@ Configure your agent to use this interceptor, setting the following options in y
 ```ini
 # interceptor
 a1.sources.r1.interceptors = i1
-a1.sources.r1.interceptors.i1.type = org.keedio.flume.interceptor.EnrichmentInterceptor$EnrichmentBuilder
+a1.sources.r1.interceptors.i1.type = org.keedio.flume.interceptor.enrichment.EnrichmentInterceptor$EnrichmentBuilder
 # Full path to the properties file that contains the extra data to enrich the event with
 a1.sources.r1.interceptors.i1.properties.filename = /path/to/filename.properties
 # The format of incoming events ( DEFAULT | enriched )
