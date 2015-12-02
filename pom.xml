@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.keedio.flume.interceptor.enrichment</groupId>
     <artifactId>flume-enrichment-interceptor</artifactId>
-    <version>0.0.8</version>
+    <version>0.0.9/version>
     <packaging>jar</packaging>
     
     <name>Flume-enrichment-interceptor</name>
@@ -67,11 +67,13 @@
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
             <version>${jackson.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
             <version>${jackson.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.flume</groupId>
@@ -83,11 +85,13 @@
             <groupId>com.googlecode.juniversalchardet</groupId>
             <artifactId>juniversalchardet</artifactId>
             <version>${juniversalchardet.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.tony19</groupId>
             <artifactId>named-regexp</artifactId>
             <version>0.2.3</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     
@@ -140,6 +144,18 @@
                         <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
                         </goals>
                     </execution>
                 </executions>

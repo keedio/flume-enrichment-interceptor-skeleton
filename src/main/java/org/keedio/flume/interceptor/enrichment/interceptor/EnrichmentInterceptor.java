@@ -17,17 +17,18 @@ public class EnrichmentInterceptor implements Interceptor {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(EnrichmentInterceptor.class);
 
-    static final String EVENT_TYPE = "event.type";
-    static final String PROPERTIES_FILENAME = "properties.filename";
+    public static final String EVENT_TYPE = "event.type";
+    public static final String PROPERTIES_FILENAME = "properties.filename";
 
     private boolean isEnriched;
     private String filename;
     private Properties props;
     
     private RegexpData regexpData;
+    protected Context context;
 
     public EnrichmentInterceptor(Context context) {
-
+        this.context = context;
         try {
             String eventType = context.getString(EVENT_TYPE).toLowerCase();
             this.isEnriched = "enriched".equals(eventType);
@@ -75,7 +76,9 @@ public class EnrichmentInterceptor implements Interceptor {
             Map<String, String> regexpResults = regexpData.applyRegexps(enrichedBody.getMessage());
             
             data.putAll(regexpResults);
-            
+
+            addAdditionalFields(event, enrichedBody);
+
             enrichedBody.setExtraData(data);
             event.setBody(enrichedBody.buildEventBody());
 
@@ -91,6 +94,10 @@ public class EnrichmentInterceptor implements Interceptor {
         }
 
         return event;
+    }
+
+    protected void addAdditionalFields(Event event, EnrichedEventBody enrichedBody){
+
     }
 
     @Override
