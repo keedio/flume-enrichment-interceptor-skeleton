@@ -36,6 +36,12 @@
             <organization>Keedio</organization>
             <organizationUrl>http://www.keedio.com</organizationUrl>
         </developer>
+         <developer>
+            <name>Marcelo Valle Avila</name>
+            <email>mvalle@keedio.org</email>
+            <organization>Keedio</organization>
+            <organizationUrl>http://www.keedio.com</organizationUrl>
+        </developer>
     </developers>
     
      <scm>
