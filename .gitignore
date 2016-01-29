@@ -5,3 +5,7 @@
 *.iml
 .springBeans
 dependency-reduced-pom.xml
+
+.classpath
+.project
+.settings/
