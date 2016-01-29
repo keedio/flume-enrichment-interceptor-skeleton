@@ -1,7 +1,7 @@
 package org.keedio.flume.interceptor.enrichment.serialization;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.SerializationConfig;
 
 import java.io.IOException;
 
@@ -10,8 +10,7 @@ public class JSONStringSerializer {
     private static ObjectMapper mapper = new ObjectMapper();
 
     static {
-        mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_EMPTY);
-        mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
+    	mapper.configure(SerializationConfig.Feature.WRITE_NULL_MAP_VALUES, false);
     }
 
     private JSONStringSerializer() {
