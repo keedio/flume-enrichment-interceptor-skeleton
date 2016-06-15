@@ -5,30 +5,18 @@
  */
 package org.keedio.flume.interceptor.enrichment.regexp;
 
-import java.util.Map;
-import junit.framework.TestCase;
-
-import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
-
-import java.nio.file.Paths;
-import java.nio.file.Path;
-import java.nio.file.Files;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.FileVisitResult;
-
-import org.apache.flume.Context;
-
-import com.google.code.regexp.Pattern;
 import com.google.code.regexp.Matcher;
-import org.slf4j.LoggerFactory;
+import com.google.code.regexp.Pattern;
+import junit.framework.TestCase;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-
-import com.google.common.collect.Maps;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -68,7 +56,7 @@ public class RegexpDataTest extends TestCase {
     public void testMatchFiles_SINGLE_Regexp() {
         System.out.println("matchFiles_single_Regexp");
 
-        Path file = Paths.get("srct/test/resources/file.log");
+        Path file = Paths.get("src/test/resources/file.log");
 
         Map<String, String> regexpMap = new HashMap<>();
         Map<String, String> matchesMap = new HashMap<>();
@@ -96,7 +84,7 @@ public class RegexpDataTest extends TestCase {
     public void testMatchFiles_SINGLE_Regexp_SEVERAL_lines() {
         System.out.println("MatchFiles_SINGLE_Regexp_SEVERAL_lines_Single_file");
 
-        Path file = Paths.get("srct/test/resources/file3.log");
+        Path file = Paths.get("src/test/resources/file3.log");
 
         Map<String, String> regexpMap = new HashMap<>();
         Map<String, String> matchesMap = new HashMap<>();
@@ -124,7 +112,7 @@ public class RegexpDataTest extends TestCase {
     public void testMatchFiles_several_Regexp() {
         System.out.println("matchFiles_several_Regexp");
 
-        Path file = Paths.get("srct/test/resources/file.log");
+        Path file = Paths.get("src/test/resources/file.log");
 
         Map<String, String> regexpMap = new HashMap<>();
         Map<String, String> matchesMap = new HashMap<>();
