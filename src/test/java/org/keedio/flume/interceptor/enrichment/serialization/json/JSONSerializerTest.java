@@ -88,9 +88,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
             Assert.assertNull(enrichedEventBodyDeserialized,"The serialization/deserialization process is not correct.");
 
 
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testJSONSerializerSerializationToByteArray");
@@ -116,9 +113,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
             //Check byte array has contents
             Assert.assertTrue(byteArray.length > 0, "The serialization to byte array is not correct");
 
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testJSONSerializerSerializationToByteArray");
@@ -155,9 +149,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
                 Assert.assertEquals(enrichedEventBody.getExtraData().get(keyEnrichedEventBody), enrichedEventBodyDeserialized.getExtraData().get(keyEnrichedEventBody), "The serialization/deserialization process is not correct.");
             }
 
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testJSONSerializerSerializationToObject");
@@ -183,9 +174,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
             //Check String has contents
             Assert.assertTrue(jsonString.length() > 0, "The serialization to JSON string is not correct");
 
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testJSONSerializerSerializationToJSONString");
@@ -225,9 +213,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
                 Assert.assertEquals(enrichedEventBody.getExtraData().get(keyEnrichedEventBody), enrichedEventBodyDeserialized.getExtraData().get(keyEnrichedEventBody), "The serialization/deserialization process is not correct.");
             }
 
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testJSONSerializerSerializationToObject");
@@ -255,9 +240,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
 
             Assert.assertTrue(Arrays.equals(byteArray, byteArraySecond),"The serialization to byte array is not correct");
 
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testSameSerializationToBytes");
@@ -285,8 +267,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
 
             Assert.assertEquals(jsonString, jsonStringSecond, "The serialization to JSON String is not correct");
 
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testSameSerializationToJSONSTring");
@@ -316,10 +296,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
             //Test deserialized object is null
             Assert.assertNull(enrichedEventBodyGenericDeserialized,"The serialization/deserialization process is not correct.");
 
-
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testJSONSerializerEmptySerializationGenericWithEnrichedEventBodyExtraData");
@@ -345,9 +321,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
             //Check byte array has contents
             Assert.assertTrue(byteArray.length > 0, "The serialization to byte array is not correct");
 
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testJSONSerializerSerializationToByteArrayGenericWithEnrichedEventBodyExtraData");
@@ -384,10 +357,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getLineNumber(), enrichedEventBodyGenericDeserialized.getExtraData().getLineNumber(),"The serialization/deserialization process is not correct.");
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getType(), enrichedEventBodyGenericDeserialized.getExtraData().getType(),"The serialization/deserialization process is not correct.");
 
-
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testJSONSerializerSerializationToObjectGenericWithEnrichedEventBodyExtraData");
@@ -413,9 +382,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
             //Check String has contents
             Assert.assertTrue(jsonString.length() > 0, "The serialization to JSON string is not correct");
 
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testJSONSerializerSerializationToJSONStringGenericWithEnrichedEventBodyExtraData");
@@ -451,8 +417,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getLineNumber(), enrichedEventBodyGenericDeserialized.getExtraData().getLineNumber(),"The serialization/deserialization process is not correct.");
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getType(), enrichedEventBodyGenericDeserialized.getExtraData().getType(),"The serialization/deserialization process is not correct.");
 
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testJSONSerializerSerializationFromJSONStringGenericWithEnrichedEventBodyExtraData");
@@ -480,9 +444,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
 
             Assert.assertTrue(Arrays.equals(byteArray, byteArraySecond),"The serialization to byte array is not correct");
 
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testSameSerializationToBytesGenericWithEnrichedEventBodyExtraData");
@@ -510,8 +471,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
 
             Assert.assertEquals(jsonString, jsonStringSecond, "The serialization to JSON String is not correct");
 
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testSameSerializationToJSONStringWithEnrichedEventBodyExtraData");
@@ -553,9 +512,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getLineNumber(), enrichedEventBodyGenericDeserialized.getExtraData().getLineNumber(),"The serialization/deserialization process is not correct.");
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getType(), enrichedEventBodyGenericDeserialized.getExtraData().getType(),"The serialization/deserialization process is not correct.");
 
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testJSONSerializerSerializationDeserializatioNotEnrichedWithEnrichedEventBodyExtraData");
@@ -596,9 +552,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getLineNumber(), enrichedEventBodyGenericDeserialized.getExtraData().getLineNumber(),"The serialization/deserialization process is not correct.");
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getType(), enrichedEventBodyGenericDeserialized.getExtraData().getType(),"The serialization/deserialization process is not correct.");
 
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testJSONSerializerSerializationDeserializationGenericWithEnrichedEventBodyExtraData");
@@ -643,8 +596,6 @@ public class JSONSerializerTest extends SerializerAbstractTest {
                 Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().get(keyEnrichedEventBod), enrichedEventBodyGenericDeserialized.getExtraData().get(keyEnrichedEventBod), "The serialization/deserialization process is not correct.");
             }
 
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testJSONSerializerSerializationDeserializationGenericWithHashMap");

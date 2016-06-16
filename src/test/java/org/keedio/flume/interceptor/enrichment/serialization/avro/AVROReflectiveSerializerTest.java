@@ -136,19 +136,8 @@ public class AVROReflectiveSerializerTest extends SerializerAbstractTest {
             //Deserialization of the byte array
             EnrichedEventBody enrichedEventBodyDeserialized = avroReflectiveSerializer.toObject(byteArrayAVROSerialization);
 
-            //Verify that the deserialization has been done
-            Assert.assertNotNull(enrichedEventBodyDeserialized ,"The deserialization process is not correct.");
-
-            //Test equality of the original object and the deserialized object
-            Assert.assertEquals(enrichedEventBody.getMessage(), enrichedEventBodyDeserialized.getMessage(),"The serialization/deserialization process is not correct.");
-
-            Assert.assertEquals(enrichedEventBody.getExtraData().size(), enrichedEventBodyDeserialized.getExtraData().size(),"The serialization/deserialization process is not correct.");
-
-            Set<String> keysetEnrichedEventBody = enrichedEventBody.getExtraData().keySet();
-
-            for (String keyEnrichedEventBod : keysetEnrichedEventBody) {
-                Assert.assertEquals(enrichedEventBody.getExtraData().get(keyEnrichedEventBod), enrichedEventBodyDeserialized.getExtraData().get(keyEnrichedEventBod), "The serialization/deserialization process is not correct.");
-            }
+            //SerializationException has been thrown (the class need a empty constructor for the reflective serializer)
+            Assert.fail("Unexpected exception in testAVROReflectiveSerializerDeserializationError");
 
         } catch (SerializationException e) {
             //Is expected exception
@@ -194,9 +183,6 @@ public class AVROReflectiveSerializerTest extends SerializerAbstractTest {
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getLineNumber(), enrichedEventBodyGenericDeserialized.getExtraData().getLineNumber(),"The serialization/deserialization process is not correct.");
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getType(), enrichedEventBodyGenericDeserialized.getExtraData().getType(),"The serialization/deserialization process is not correct.");
 
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testAVROReflectiveSerializerSerializationDeserializationNotEnrichedWithEnrichedEventBodyExtraData");
@@ -238,9 +224,6 @@ public class AVROReflectiveSerializerTest extends SerializerAbstractTest {
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getLineNumber(), enrichedEventBodyGenericDeserialized.getExtraData().getLineNumber(),"The serialization/deserialization process is not correct.");
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getType(), enrichedEventBodyGenericDeserialized.getExtraData().getType(),"The serialization/deserialization process is not correct.");
 
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testAVROReflectiveSerializerSerializationDeserializationGenericWithEnrichedEventBodyExtraData");
@@ -283,8 +266,6 @@ public class AVROReflectiveSerializerTest extends SerializerAbstractTest {
                 Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().get(keyEnrichedEventBod), enrichedEventBodyGenericDeserialized.getExtraData().get(keyEnrichedEventBod), "The serialization/deserialization process is not correct.");
             }
 
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testAVROReflectiveSerializerSerializationDeserializationGenericWithHashMap");

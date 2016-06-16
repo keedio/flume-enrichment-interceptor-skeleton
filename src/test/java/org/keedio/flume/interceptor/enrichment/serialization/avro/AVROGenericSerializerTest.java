@@ -168,8 +168,6 @@ public class AVROGenericSerializerTest extends SerializerAbstractTest {
                 Assert.assertEquals(enrichedEventBody.getExtraData().get(keyEnrichedEventBody), enrichedEventBodyDeserialized.getExtraData().get(keyEnrichedEventBody), "The serialization/deserialization process is not correct.");
             }
 
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testAVROGenericSerializerSerializationDeserialization");
@@ -306,9 +304,6 @@ public class AVROGenericSerializerTest extends SerializerAbstractTest {
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getLineNumber(), enrichedEventBodyGenericDeserialized.getExtraData().getLineNumber(),"The serialization/deserialization process is not correct.");
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getType(), enrichedEventBodyGenericDeserialized.getExtraData().getType(),"The serialization/deserialization process is not correct.");
 
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testAVROGenericSerializerSerializationDeserializationNotEnrichedWithEnrichedEventBodyExtraData");
@@ -362,9 +357,6 @@ public class AVROGenericSerializerTest extends SerializerAbstractTest {
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getLineNumber(), enrichedEventBodyGenericDeserialized.getExtraData().getLineNumber(),"The serialization/deserialization process is not correct.");
             Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().getType(), enrichedEventBodyGenericDeserialized.getExtraData().getType(),"The serialization/deserialization process is not correct.");
 
-
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testAVROGenericSerializerSerializationDeserializationGenericWithEnrichedEventBodyExtraData");
@@ -421,8 +413,6 @@ public class AVROGenericSerializerTest extends SerializerAbstractTest {
                 Assert.assertEquals(enrichedEventBodyGeneric.getExtraData().get(keyEnrichedEventBod), enrichedEventBodyGenericDeserialized.getExtraData().get(keyEnrichedEventBod), "The serialization/deserialization process is not correct.");
             }
 
-        } catch (SerializationException e) {
-            //Is expected exception
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Unexpected exception in testAVROGenericSerializerSerializationDeserializationGenericWithHashMap");
