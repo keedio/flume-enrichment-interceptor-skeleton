@@ -1,0 +1,6 @@
+{"type":"record",
+"name":"EnrichedEventBodyGeneric",
+"namespace":"org.keedio.flume.interceptor.enrichment.interceptor",
+"fields":
+[{"name":"extraData","type":{"type":"record","name":"EnrichedEventBodyExtraData","fields":[{"name":"topic","type":["null", "string"]},{"name":"timestamp","type":["null", "string"]},{"name":"sha1Hex","type":["null", "string"]},{"name":"filePath","type":["null", "string"]},{"name":"fileName","type":["null", "string"]},{"name":"lineNumber","type":["null", "string"]},{"name":"type","type":["null", "string"]}]}},
+{"name":"message","type":"string"}]}

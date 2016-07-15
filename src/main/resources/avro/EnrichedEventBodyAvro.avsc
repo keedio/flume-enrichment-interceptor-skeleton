@@ -1,0 +1,7 @@
+{"type":"record",
+"name":"EnrichedEventBodyAvro",
+"namespace":"org.keedio.flume.interceptor.enrichment.interceptor",
+"fields":
+[
+{"name":"extraData","type":{"type":"map","values":"string"}},
+{"name":"message","type":"string"}]}
