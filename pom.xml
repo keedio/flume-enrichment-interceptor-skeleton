@@ -16,7 +16,7 @@
     </licenses>
     
     <url>https://github.com/keedio/flume-enrichment-interceptor-skeleton</url>
-    
+
     <developers>
         <developer>
             <name>Luca Rosellini</name>
@@ -43,7 +43,19 @@
         <developerConnection>scm:git:git@github.com:keedio/flume-enrichment-interceptor-skeleton.git</developerConnection>
         <url>https://github.com/keedio/flume-enrichment-interceptor-skeleton</url>
     </scm>
-    
+    <distributionManagement>
+        <repository>
+            <id>keedio-releases</id>
+            <name>Keedio Releases</name>
+            <url>http://jenkson.keedio.com:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>keedio-snapshots</id>
+            <name>Keedio Snapshots</name>
+            <url>http://jenkson.keedio.com:8081/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <properties>
         <!-- Generic properties -->
         <java.version>1.7</java.version>
