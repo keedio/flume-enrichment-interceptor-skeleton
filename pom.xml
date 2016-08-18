@@ -64,7 +64,7 @@
         <!--  Dependency versions -->
         <flume.core.version>1.6.0</flume.core.version>
         <jackson.version>1.9.13</jackson.version>
-        <testng.version>6.1.1</testng.version>
+        <testng.version>6.2.1</testng.version>
         <juniversalchardet.version>1.0.3</juniversalchardet.version>
     </properties>
     
