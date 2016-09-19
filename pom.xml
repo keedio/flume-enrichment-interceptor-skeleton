@@ -97,13 +97,11 @@
             <groupId>com.googlecode.juniversalchardet</groupId>
             <artifactId>juniversalchardet</artifactId>
             <version>${juniversalchardet.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.tony19</groupId>
             <artifactId>named-regexp</artifactId>
             <version>0.2.3</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
     
