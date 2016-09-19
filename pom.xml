@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.keedio.flume.interceptor.enrichment</groupId>
     <artifactId>flume-enrichment-interceptor</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <packaging>jar</packaging>
     
     <name>Flume-enrichment-interceptor</name>
@@ -16,7 +16,7 @@
     </licenses>
     
     <url>https://github.com/keedio/flume-enrichment-interceptor-skeleton</url>
-    
+
     <developers>
         <developer>
             <name>Luca Rosellini</name>
@@ -43,7 +43,19 @@
         <developerConnection>scm:git:git@github.com:keedio/flume-enrichment-interceptor-skeleton.git</developerConnection>
         <url>https://github.com/keedio/flume-enrichment-interceptor-skeleton</url>
     </scm>
-    
+    <distributionManagement>
+        <repository>
+            <id>keedio-releases</id>
+            <name>Keedio Releases</name>
+            <url>http://jenkson.keedio.com:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>keedio-snapshots</id>
+            <name>Keedio Snapshots</name>
+            <url>http://jenkson.keedio.com:8081/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <properties>
         <!-- Generic properties -->
         <java.version>1.7</java.version>
@@ -52,7 +64,7 @@
         <!--  Dependency versions -->
         <flume.core.version>1.6.0</flume.core.version>
         <jackson.version>1.9.13</jackson.version>
-        <testng.version>6.1.1</testng.version>
+        <testng.version>6.2.1</testng.version>
         <juniversalchardet.version>1.0.3</juniversalchardet.version>
     </properties>
     
@@ -85,13 +97,11 @@
             <groupId>com.googlecode.juniversalchardet</groupId>
             <artifactId>juniversalchardet</artifactId>
             <version>${juniversalchardet.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.tony19</groupId>
             <artifactId>named-regexp</artifactId>
             <version>0.2.3</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
     
