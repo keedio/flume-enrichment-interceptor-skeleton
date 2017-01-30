@@ -21,6 +21,9 @@ public class RegexpData {
 
     private final String CUSTOM_REGEXPS = "custom.regexp.";
 
+    private Integer regexpKey;
+    private Integer regexpValue;
+
     public RegexpData(Context context) {
         Map<String, String> subProperties = context.getSubProperties(CUSTOM_REGEXPS);
 
@@ -28,6 +31,8 @@ public class RegexpData {
             regexpMap.put(entry.getKey(), Pattern.compile(entry.getValue()));
         }
 
+        this.regexpKey = context.getInteger("custom.group.regexp.key", 1);
+        this.regexpValue = context.getInteger("custom.group.regexp.value", 2);
     }
 
     /**
@@ -50,7 +55,7 @@ public class RegexpData {
                 m.reset();
                 // Useful for regexps with <key, value> pairs
                 while (m.find() && m.groupCount() > 0){
-                     matchesMap.put(m.group(1), m.group(2));
+                     matchesMap.put(m.group(this.regexpKey), m.group(this.regexpValue));
                 }
             }
         }

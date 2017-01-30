@@ -166,13 +166,42 @@ public class RegexpDataTest extends TestCase {
     }
 
     @Test
-    public void testNoNamedGroups() {
+    public void testNoNamedGroupsDefaultKeyValue() {
         try {
             Event event = createEvent("time=20:11:10 devname=FGT3HD3915807828 devid=FGT3HD3915808013 some=\"quoted content\"");
             Context context = new Context();
             context.put(EnrichmentInterceptor.EVENT_TYPE, "DEFAULT");
             context.put("custom.regexp.1","(\\w+)=([^\"\\s]+)");  // For non-quoted key-value pairs
             context.put("custom.regexp.2","(\\w+)=[\"]([^\"]+)[\"]");  // For quoted key-value pairs
+            EnrichmentInterceptor interceptor = createEnrichedInterceptor(event, context);
+            Event intercepted = interceptor.intercept(event);
+
+            EnrichedEventBody enrichedEventBody = EnrichedEventBody.createFromEventBody(intercepted.getBody(), true);
+
+            assertTrue(enrichedEventBody.getExtraData().containsKey("time"));
+            assertEquals(enrichedEventBody.getExtraData().get("time"),"20:11:10");
+            assertTrue(enrichedEventBody.getExtraData().containsKey("devname"));
+            assertEquals(enrichedEventBody.getExtraData().get("devname"),"FGT3HD3915807828");
+            assertTrue(enrichedEventBody.getExtraData().containsKey("devid"));
+            assertEquals(enrichedEventBody.getExtraData().get("devid"),"FGT3HD3915808013");
+            assertTrue(enrichedEventBody.getExtraData().containsKey("some"));
+            assertEquals(enrichedEventBody.getExtraData().get("some"),"quoted content");
+        } catch (IOException e) {
+            e.printStackTrace();
+            junit.framework.Assert.fail();
+        }
+    }
+
+    @Test
+    public void testNoNamedGroupsDifferentKeyValueGroups() {
+        try {
+            Event event = createEvent("time=20:11:10 devname=FGT3HD3915807828 devid=FGT3HD3915808013 some=\"quoted content\"");
+            Context context = new Context();
+            context.put(EnrichmentInterceptor.EVENT_TYPE, "DEFAULT");
+            context.put("custom.regexp.1","(\\w+)(=)([^\"\\s]+)");  // For non-quoted key-value pairs
+            context.put("custom.regexp.2","(\\w+)(=)[\"]([^\"]+)[\"]");  // For quoted key-value pairs
+            //context.put("custom.group.regexp.key", "1");  // Default: 1
+            context.put("custom.group.regexp.value", "3");  // Default: 2
             EnrichmentInterceptor interceptor = createEnrichedInterceptor(event, context);
             Event intercepted = interceptor.intercept(event);
 
