@@ -49,8 +49,8 @@ a1.sources.r1.interceptors.i1.custom.regexp.n =
 
 
 # In case that the input is a (optionally multiple) key-value pair string, there's no need to use named groups. It also supports regexps where one group will act as the key (default index: 1), and other group will act as the value (default index: 2)
-a1.sources.r1.interceptors.i1.custom.regexp.1 = (\w+)=([^"\s]+)")
-a1.sources.r1.interceptors.i1.custom.regexp.2 = (\w+)=["]([^"]+)["]
+a1.sources.r1.interceptors.i1.custom.regexp.1 = (\w+)=([^\"\s]+)
+a1.sources.r1.interceptors.i1.custom.regexp.2 = (\w+)=[\"]([^\"]+)[\"]
 .......................
 a1.sources.r1.interceptors.i1.custom.regexp.n = 
 # If there are multiple regexps, the capture groups for key and value will be the same for all
