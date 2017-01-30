@@ -46,15 +46,11 @@ public class RegexpData {
                 matchesMap.putAll(m.namedGroups());
                 break;
             } else {
-                // First match is already catched
+                // First match is already catched by previous namedGroups() call, so we reset it
+                m.reset();
                 // Useful for regexps with <key, value> pairs
-                try {
-                    do {
-                        matchesMap.put(m.group(1), m.group(2));
-                    } while (m.find());
-                } catch (IndexOutOfBoundsException e) {
-                    // Thrown if there's no <key, value> pair
-                    e.printStackTrace();
+                while (m.find() && m.groupCount() > 0){
+                     matchesMap.put(m.group(1), m.group(2));
                 }
             }
         }

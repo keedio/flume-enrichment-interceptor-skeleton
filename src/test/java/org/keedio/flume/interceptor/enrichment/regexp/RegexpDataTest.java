@@ -165,14 +165,14 @@ public class RegexpDataTest extends TestCase {
         }
     }
 
-
     @Test
     public void testNoNamedGroups() {
         try {
-            Event event = createEvent("time=20:11:10 devname=FGT3HD3915807828 devid=FGT3HD3915808013");
+            Event event = createEvent("time=20:11:10 devname=FGT3HD3915807828 devid=FGT3HD3915808013 some=\"quoted content\"");
             Context context = new Context();
             context.put(EnrichmentInterceptor.EVENT_TYPE, "DEFAULT");
-            context.put("custom.regexp.1","(\\w+)=([^\\s]+)");
+            context.put("custom.regexp.1","(\\w+)=([^\"\\s]+)");  // For non-quoted key-value pairs
+            context.put("custom.regexp.2","(\\w+)=[\"]([^\"]+)[\"]");  // For quoted key-value pairs
             EnrichmentInterceptor interceptor = createEnrichedInterceptor(event, context);
             Event intercepted = interceptor.intercept(event);
 
@@ -184,6 +184,28 @@ public class RegexpDataTest extends TestCase {
             assertEquals(enrichedEventBody.getExtraData().get("devname"),"FGT3HD3915807828");
             assertTrue(enrichedEventBody.getExtraData().containsKey("devid"));
             assertEquals(enrichedEventBody.getExtraData().get("devid"),"FGT3HD3915808013");
+            assertTrue(enrichedEventBody.getExtraData().containsKey("some"));
+            assertEquals(enrichedEventBody.getExtraData().get("some"),"quoted content");
+        } catch (IOException e) {
+            e.printStackTrace();
+            junit.framework.Assert.fail();
+        }
+    }
+
+    @Test
+    public void testEmptyGroups() {
+        try {
+            Event event = createEvent("");
+            Context context = new Context();
+            context.put(EnrichmentInterceptor.EVENT_TYPE, "DEFAULT");
+            context.put("custom.regexp.1","(\\w+)=([^\"\\s]+)");  // For non-quoted key-value pairs
+            context.put("custom.regexp.2","(\\w+)=[\"]([^\"]+)[\"]");  // For quoted key-value pairs
+            EnrichmentInterceptor interceptor = createEnrichedInterceptor(event, context);
+            Event intercepted = interceptor.intercept(event);
+
+            EnrichedEventBody enrichedEventBody = EnrichedEventBody.createFromEventBody(intercepted.getBody(), true);
+
+            assertEquals(enrichedEventBody.getExtraData().size(), 0);
         } catch (IOException e) {
             e.printStackTrace();
             junit.framework.Assert.fail();
