@@ -8,6 +8,12 @@ package org.keedio.flume.interceptor.enrichment.regexp;
 import com.google.code.regexp.Matcher;
 import com.google.code.regexp.Pattern;
 import junit.framework.TestCase;
+import org.apache.flume.Context;
+import org.apache.flume.Event;
+import org.apache.flume.event.EventBuilder;
+import org.keedio.flume.interceptor.enrichment.interceptor.EnrichedEventBody;
+import org.keedio.flume.interceptor.enrichment.interceptor.EnrichmentInterceptor;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -17,6 +23,9 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 
 /**
  *
@@ -134,6 +143,120 @@ public class RegexpDataTest extends TestCase {
 
         System.out.println(matchesMap);
 
+    }
+
+    @Test
+    public void testSimpleNamedGroup() {
+        try {
+            Event event = createEvent("2015-04-23 07:16:08 1 85.31.12.49");
+            Context context = new Context();
+            context.put(EnrichmentInterceptor.EVENT_TYPE, "DEFAULT");
+            context.put("custom.regexp.1","(?<date>\\d{4}-\\d{2}-\\d{2}+)\\s");
+            EnrichmentInterceptor interceptor = createEnrichedInterceptor(event, context);
+            Event intercepted = interceptor.intercept(event);
+
+            EnrichedEventBody enrichedEventBody = EnrichedEventBody.createFromEventBody(intercepted.getBody(), true);
+
+            assertTrue(enrichedEventBody.getExtraData().containsKey("date"));
+            assertEquals(enrichedEventBody.getExtraData().get("date"),"2015-04-23");
+        } catch (IOException e) {
+            e.printStackTrace();
+            junit.framework.Assert.fail();
+        }
+    }
+
+    @Test
+    public void testNoNamedGroupsDefaultKeyValue() {
+        try {
+            Event event = createEvent("time=20:11:10 devname=FGT3HD3915807828 devid=FGT3HD3915808013 some=\"quoted content\"");
+            Context context = new Context();
+            context.put(EnrichmentInterceptor.EVENT_TYPE, "DEFAULT");
+            context.put("custom.regexp.1","(\\w+)=([^\"\\s]+)");  // For non-quoted key-value pairs
+            context.put("custom.regexp.2","(\\w+)=[\"]([^\"]+)[\"]");  // For quoted key-value pairs
+            EnrichmentInterceptor interceptor = createEnrichedInterceptor(event, context);
+            Event intercepted = interceptor.intercept(event);
+
+            EnrichedEventBody enrichedEventBody = EnrichedEventBody.createFromEventBody(intercepted.getBody(), true);
+
+            assertTrue(enrichedEventBody.getExtraData().containsKey("time"));
+            assertEquals(enrichedEventBody.getExtraData().get("time"),"20:11:10");
+            assertTrue(enrichedEventBody.getExtraData().containsKey("devname"));
+            assertEquals(enrichedEventBody.getExtraData().get("devname"),"FGT3HD3915807828");
+            assertTrue(enrichedEventBody.getExtraData().containsKey("devid"));
+            assertEquals(enrichedEventBody.getExtraData().get("devid"),"FGT3HD3915808013");
+            assertTrue(enrichedEventBody.getExtraData().containsKey("some"));
+            assertEquals(enrichedEventBody.getExtraData().get("some"),"quoted content");
+        } catch (IOException e) {
+            e.printStackTrace();
+            junit.framework.Assert.fail();
+        }
+    }
+
+    @Test
+    public void testNoNamedGroupsDifferentKeyValueGroups() {
+        try {
+            Event event = createEvent("time=20:11:10 devname=FGT3HD3915807828 devid=FGT3HD3915808013 some=\"quoted content\"");
+            Context context = new Context();
+            context.put(EnrichmentInterceptor.EVENT_TYPE, "DEFAULT");
+            context.put("custom.regexp.1","(\\w+)(=)([^\"\\s]+)");  // For non-quoted key-value pairs
+            context.put("custom.regexp.2","(\\w+)(=)[\"]([^\"]+)[\"]");  // For quoted key-value pairs
+            //context.put("custom.group.regexp.key", "1");  // Default: 1
+            context.put("custom.group.regexp.value", "3");  // Default: 2
+            EnrichmentInterceptor interceptor = createEnrichedInterceptor(event, context);
+            Event intercepted = interceptor.intercept(event);
+
+            EnrichedEventBody enrichedEventBody = EnrichedEventBody.createFromEventBody(intercepted.getBody(), true);
+
+            assertTrue(enrichedEventBody.getExtraData().containsKey("time"));
+            assertEquals(enrichedEventBody.getExtraData().get("time"),"20:11:10");
+            assertTrue(enrichedEventBody.getExtraData().containsKey("devname"));
+            assertEquals(enrichedEventBody.getExtraData().get("devname"),"FGT3HD3915807828");
+            assertTrue(enrichedEventBody.getExtraData().containsKey("devid"));
+            assertEquals(enrichedEventBody.getExtraData().get("devid"),"FGT3HD3915808013");
+            assertTrue(enrichedEventBody.getExtraData().containsKey("some"));
+            assertEquals(enrichedEventBody.getExtraData().get("some"),"quoted content");
+        } catch (IOException e) {
+            e.printStackTrace();
+            junit.framework.Assert.fail();
+        }
+    }
+
+    @Test
+    public void testEmptyGroups() {
+        try {
+            Event event = createEvent("");
+            Context context = new Context();
+            context.put(EnrichmentInterceptor.EVENT_TYPE, "DEFAULT");
+            context.put("custom.regexp.1","(\\w+)=([^\"\\s]+)");  // For non-quoted key-value pairs
+            context.put("custom.regexp.2","(\\w+)=[\"]([^\"]+)[\"]");  // For quoted key-value pairs
+            EnrichmentInterceptor interceptor = createEnrichedInterceptor(event, context);
+            Event intercepted = interceptor.intercept(event);
+
+            EnrichedEventBody enrichedEventBody = EnrichedEventBody.createFromEventBody(intercepted.getBody(), true);
+
+            assertEquals(enrichedEventBody.getExtraData().size(), 0);
+        } catch (IOException e) {
+            e.printStackTrace();
+            junit.framework.Assert.fail();
+        }
+    }
+
+
+    protected Event createEvent(String message) {
+        HashMap headers = new HashMap();
+        headers.put("h1", "value1");
+        return EventBuilder.withBody(message.getBytes(), headers);
+    }
+
+
+    protected EnrichmentInterceptor createEnrichedInterceptor(Event event, Context context) {
+
+
+        EnrichmentInterceptor.Builder builder = new EnrichmentInterceptor.EnrichmentBuilder();
+        builder.configure(context);
+        EnrichmentInterceptor interceptor = (EnrichmentInterceptor) builder.build();
+        interceptor.initialize();
+        return interceptor;
     }
 
 //    public void testMatchFiles_several_Regexp_and_files(){
