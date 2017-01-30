@@ -41,9 +41,21 @@ public class RegexpData {
 
         for (Map.Entry<String, Pattern> entry : regexpMap.entrySet()) {
             Matcher m = entry.getValue().matcher(message);
-            if (m.find()) {
+
+            if (m.namedGroups().size() > 0) {
                 matchesMap.putAll(m.namedGroups());
                 break;
+            } else {
+                // First match is already catched
+                // Useful for regexps with <key, value> pairs
+                try {
+                    do {
+                        matchesMap.put(m.group(1), m.group(2));
+                    } while (m.find());
+                } catch (IndexOutOfBoundsException e) {
+                    // Thrown if there's no <key, value> pair
+                    e.printStackTrace();
+                }
             }
         }
         return matchesMap;
