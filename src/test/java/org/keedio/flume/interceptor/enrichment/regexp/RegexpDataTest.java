@@ -24,9 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-
 /**
  *
  * @author luislazaro
@@ -235,6 +232,36 @@ public class RegexpDataTest extends TestCase {
             EnrichedEventBody enrichedEventBody = EnrichedEventBody.createFromEventBody(intercepted.getBody(), true);
 
             assertEquals(enrichedEventBody.getExtraData().size(), 0);
+        } catch (IOException e) {
+            e.printStackTrace();
+            junit.framework.Assert.fail();
+        }
+    }
+
+
+
+    @Test
+    public void testNoNamedGroupsUrlEncoded() {
+        try {
+            Event event = createEvent("time=20:11:10 devname=FGT3HD3915807828 devid=FGT3HD3915808013 some=\"quoted content\"");
+            Context context = new Context();
+            context.put(EnrichmentInterceptor.EVENT_TYPE, "DEFAULT");
+            context.put("custom.regexp.1","%28%5Cw%2B%29%3D%28%5B%5E%5C%22%5Cs%5D%2B%29");  // For non-quoted key-value pairs
+            context.put("custom.regexp.2","%28%5Cw%2B%29%3D%5B%5C%22%5D%28%5B%5E%5C%22%5D%2B%29%5B%5C%22%5D");  // For quoted key-value pairs
+            context.put("regexp.is.urlencoded", "true");
+            EnrichmentInterceptor interceptor = createEnrichedInterceptor(event, context);
+            Event intercepted = interceptor.intercept(event);
+
+            EnrichedEventBody enrichedEventBody = EnrichedEventBody.createFromEventBody(intercepted.getBody(), true);
+
+            assertTrue(enrichedEventBody.getExtraData().containsKey("time"));
+            assertEquals(enrichedEventBody.getExtraData().get("time"),"20:11:10");
+            assertTrue(enrichedEventBody.getExtraData().containsKey("devname"));
+            assertEquals(enrichedEventBody.getExtraData().get("devname"),"FGT3HD3915807828");
+            assertTrue(enrichedEventBody.getExtraData().containsKey("devid"));
+            assertEquals(enrichedEventBody.getExtraData().get("devid"),"FGT3HD3915808013");
+            assertTrue(enrichedEventBody.getExtraData().containsKey("some"));
+            assertEquals(enrichedEventBody.getExtraData().get("some"),"quoted content");
         } catch (IOException e) {
             e.printStackTrace();
             junit.framework.Assert.fail();
