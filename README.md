@@ -46,6 +46,25 @@ a1.sources.r1.interceptors.i1.custom.regexp.2 = (?<nameA>regex)\\METACHARACTER(?
 .......................
 a1.sources.r1.interceptors.i1.custom.regexp.n = 
 
+
+
+# In case that the input is a (optionally multiple) key-value pair string, there's no need to use named groups. It also supports regexps where one group will act as the key (default index: 1), and other group will act as the value (default index: 2)
+a1.sources.r1.interceptors.i1.custom.regexp.1 = (\w+)=([^\"\s]+)
+a1.sources.r1.interceptors.i1.custom.regexp.2 = (\w+)=[\"]([^\"]+)[\"]
+.......................
+a1.sources.r1.interceptors.i1.custom.regexp.n = 
+# If there are multiple regexps, the capture groups for key and value will be the same for all
+# The capture group indexes for key and value can be modified by the next configuration
+a1.sources.r1.interceptors.i1.custom.group.regexp.key = 1
+a1.sources.r1.interceptors.i1.custom.group.regexp.value = 2
+
+
+
+# If the regexps are using some reserved characters which are wrongly handled by some tool administrator (for example, Ambari with character "=" inside a property value), there's the possibility to encode the regexps in order to avoid problems
+# In order to be recognized as UrlEncoded, the property "regexp.is.urlencoded" must be true
+a1.sources.r1.interceptors.i1.custom.regexp.1 = %28%5Cw%2B%29%3D%28%5B%5E%5C%22%5Cs%5D%2B%29
+a1.sources.r1.interceptors.i1.custom.regexp.2 = %28%5Cw%2B%29%3D%5B%5C%22%5D%28%5B%5E%5C%22%5D%2B%29%5B%5C%22%5D
+a1.sources.r1.interceptors.i1.regexp.is.urlencoded = true
 ```
 
 Example of custom properties:

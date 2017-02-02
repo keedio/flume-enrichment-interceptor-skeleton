@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.keedio.flume.interceptor.enrichment</groupId>
     <artifactId>flume-enrichment-interceptor</artifactId>
-    <version>0.1.2</version>
+    <version>0.2.0</version>
     <packaging>jar</packaging>
     
     <name>Flume-enrichment-interceptor</name>
@@ -33,6 +33,12 @@
         <developer>
             <name>Luis Lázaro Medina</name>
             <email>lalazaro@keedio.org</email>
+            <organization>Keedio</organization>
+            <organizationUrl>http://www.keedio.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Daniel Sánchez</name>
+            <email>dsanchez@keedio.org</email>
             <organization>Keedio</organization>
             <organizationUrl>http://www.keedio.com</organizationUrl>
         </developer>
@@ -102,6 +108,13 @@
             <groupId>com.github.tony19</groupId>
             <artifactId>named-regexp</artifactId>
             <version>0.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xerial.snappy</groupId>
+            <artifactId>snappy-java</artifactId>
+            <version>1.1.2.6</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     
