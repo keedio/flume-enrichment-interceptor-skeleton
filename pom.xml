@@ -68,7 +68,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!--  Dependency versions -->
-        <flume.core.version>1.6.0</flume.core.version>
+        <flume.core.version>1.8.0</flume.core.version>
         <jackson.version>1.9.13</jackson.version>
         <testng.version>6.2.1</testng.version>
         <juniversalchardet.version>1.0.3</juniversalchardet.version>
