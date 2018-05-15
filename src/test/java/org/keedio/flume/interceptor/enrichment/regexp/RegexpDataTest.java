@@ -44,18 +44,7 @@ public class RegexpDataTest extends TestCase {
         super.tearDown();
     }
 
-    /**
-     * Test of getMatchesMap method, of class RegexpData.
-     */
-//    public void testGetMatchesMap() {
-//        System.out.println("getMatchesMap");
-//        RegexpData instance = null;
-//        Map<String, String> expResult = null;
-//        Map<String, String> result = instance.getMatchesMap();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+
     /**
      * Test of matchFilesRegexp(), of class RegexpData
      */
@@ -286,51 +275,33 @@ public class RegexpDataTest extends TestCase {
         return interceptor;
     }
 
-//    public void testMatchFiles_several_Regexp_and_files(){
-//         System.out.println("matchFiles_several_Regexp_and_files");
-//         
-//         Path file = Paths.get("srct/test/resources/file.log");
-//         Path file2 = Paths.get("srct/test/resources/file2.log");
-//         
-//         
-//         Map<String,String> regexpMap = new HashMap<>();
-//         Map<String,String> matchesMap = new HashMap<>();
-//         
-//         regexpMap.put("1","(?<date>\\d{4}-\\d{2}-\\d{2}+)\\s");
-//         regexpMap.put("2","(?<time>\\d{2}:\\d{2}:\\d{2}+)\\s");
-//         
-//         
-//         
-//         
-//         try {
-//          List<String> linesfile = Files.readAllLines(file, Charset.defaultCharset());
-//           for (String line : linesfile) {
-//                    for (String regexp : regexpMap.values()) {
-//                        Matcher m = Pattern.compile(regexp).matcher(line);
-//                        matchesMap.putAll(m.namedGroups());
-//                        System.out.println(matchesMap);
-//                    }
-//                }
-//         } catch(IOException e){
-//             e.printStackTrace();
-//         }
-//         
-//         
-//         try {
-//          List<String> linesfile = Files.readAllLines(file2, Charset.defaultCharset());
-//           for (String line : linesfile) {
-//                    for (String regexp : regexpMap.values()) {
-//                        Matcher m = Pattern.compile(regexp).matcher(line);
-//                        matchesMap.putAll(m.namedGroups());
-//                        System.out.println(matchesMap);
-//                    }
-//                }
-//         } catch(IOException e){
-//             e.printStackTrace();
-//         }
-//         
-//         //System.out.println(matchesMap);
-//        
-//    }
+    /**
+     * line1
+     * line2
+     * Just line2 matches named_groups
+     */
+    @Test
+    public void testSimpleNamedGroupMultipleEvents() {
+        try {
+            Event headerEvent = createEvent("Col1,Col2,Col3");
+            Event lineEvent = createEvent("event_1,XYZ,ABC");
+            Context context = new Context();
+            context.put(EnrichmentInterceptor.EVENT_TYPE, "DEFAULT");
+            context.put("custom.regexp.1","^event_(?<event_number>[0-9]*)");
+            EnrichmentInterceptor interceptor = createEnrichedInterceptor(headerEvent, context);
+            Event intercepted1 = interceptor.intercept(headerEvent);
+            Event intercepted2 = interceptor.intercept(lineEvent);
+
+            EnrichedEventBody enrichedEventBody1 = EnrichedEventBody.createFromEventBody(intercepted1.getBody(), true);
+            EnrichedEventBody enrichedEventBody2 = EnrichedEventBody.createFromEventBody(intercepted2.getBody(), true);
+
+            assertFalse(enrichedEventBody1.getExtraData().containsKey("event_number"));
+            assertTrue(enrichedEventBody2.getExtraData().containsKey("event_number"));
+            assertEquals(enrichedEventBody2.getExtraData().get("event_number"),"1");
+        } catch (IOException e) {
+            e.printStackTrace();
+            junit.framework.Assert.fail();
+        }
+    }
    
 }//endofclass
