@@ -25,7 +25,7 @@ public class EnrichmentInterceptorTest extends EnrichmentInterceptorAbstractTest
 
     @Test
     public void testMissingEventTypeProperty() {
-        EnrichmentInterceptor interceptor = createInterceptor(null, null);
+        EnrichmentInterceptor interceptor = createInterceptor(null, "");
         Assert.assertFalse(interceptor.isEnriched());
     }
 
@@ -33,14 +33,14 @@ public class EnrichmentInterceptorTest extends EnrichmentInterceptorAbstractTest
     public void testEmptyFilenameProperty() {
         String emptyString = "";
         Properties emptyProps = new Properties();
-        EnrichmentInterceptor interceptor = createInterceptor("", null);
+        EnrichmentInterceptor interceptor = createInterceptor("", "");
         Assert.assertTrue(interceptor.getFilename().equals(emptyString) && interceptor.getProps().equals(emptyProps));
     }
 
     @Test
     public void testMissingFilenameProperty() {
         Properties emptyProps = new Properties();
-        EnrichmentInterceptor interceptor = createInterceptor(null, null);
+        EnrichmentInterceptor interceptor = createInterceptor(null, "");
         Assert.assertTrue(interceptor.getFilename() == null && interceptor.getProps().equals(emptyProps));
     }
 
