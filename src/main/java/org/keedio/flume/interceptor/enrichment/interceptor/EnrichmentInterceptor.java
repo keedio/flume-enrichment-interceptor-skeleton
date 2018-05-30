@@ -74,8 +74,11 @@ public class EnrichmentInterceptor implements Interceptor {
             }
             
             Map<String, String> regexpResults = regexpData.applyRegexps(enrichedBody.getMessage());
-            
-            data.putAll(regexpResults);
+
+            synchronized(data){
+                data.putAll(regexpResults);
+            }
+
 
             addAdditionalFields(event, enrichedBody);
 
