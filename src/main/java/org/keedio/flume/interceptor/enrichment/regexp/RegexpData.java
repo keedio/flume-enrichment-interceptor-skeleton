@@ -64,9 +64,9 @@ public class RegexpData {
 
       if (m.namedGroups().size() > 0) {
         logger.debug("WITH NAMED GROUPS");
-        matchesMap.putAll(m.namedGroups());
-        m.reset();
-        break;
+        for (Map.Entry<String, String> group : m.namedGroups().entrySet()) {
+          matchesMap.put(group.getKey(), group.getValue());
+        }
       } else {
         logger.debug("WITHOUT NAMED GROUPS");
         // First match is already catched by previous namedGroups() call, so we reset it
