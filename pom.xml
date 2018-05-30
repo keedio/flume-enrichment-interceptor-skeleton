@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.keedio.flume.interceptor.enrichment</groupId>
     <artifactId>flume-enrichment-interceptor</artifactId>
-    <version>0.2.2</version>
+    <version>0.2.1</version>
     <packaging>jar</packaging>
     
     <name>Flume-enrichment-interceptor</name>
