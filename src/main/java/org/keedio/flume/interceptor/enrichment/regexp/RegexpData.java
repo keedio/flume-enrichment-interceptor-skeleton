@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.flume.Context;
 
@@ -19,7 +21,7 @@ public class RegexpData {
   private static final org.slf4j.Logger logger = LoggerFactory.getLogger(RegexpData.class);
 
   private Map<String, Pattern> regexpMap = new HashMap<>();
-  private Map<String, String> matchesMap = new HashMap<>();
+  private ConcurrentMap<String, String> matchesMap = new ConcurrentHashMap<>();
 
   private final String CUSTOM_REGEXPS = "custom.regexp.";
 
@@ -55,7 +57,7 @@ public class RegexpData {
    * @param message
    * @return map
    */
-  public Map<String, String> applyRegexps(String message) {
+  public ConcurrentMap<String, String> applyRegexps(String message) {
     logger.debug("Message: " + message);
     matchesMap.clear();
     for (Map.Entry<String, Pattern> entry : regexpMap.entrySet()) {
