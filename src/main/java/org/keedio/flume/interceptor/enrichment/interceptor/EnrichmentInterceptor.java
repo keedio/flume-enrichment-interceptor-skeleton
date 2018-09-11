@@ -103,13 +103,19 @@ public class EnrichmentInterceptor implements Interceptor {
 
     }
 
+
     @Override
-    public List<Event> intercept(List<Event> events) {
-        List<Event> out = new LinkedList<Event>();
-        for (Event e : events) {
-            out.add(intercept(e));
+    public List<Event> intercept(List<Event> events)
+    {
+        /*
+        We can ignore return value, because the event is modified in place.
+         */
+        for (Event event : events){
+
+            intercept(event);
         }
-        return out;
+
+        return events;
     }
 
     @Override
